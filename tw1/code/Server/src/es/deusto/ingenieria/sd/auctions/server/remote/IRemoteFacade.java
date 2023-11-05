@@ -14,9 +14,8 @@ import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
 public interface IRemoteFacade extends Remote {
 
 	boolean googleRegistration(UserProfileDto user) throws RemoteException;
-	long googleLogin(String email, String password) throws RemoteException;
 	boolean facebookRegistration(UserProfileDto user) throws RemoteException;
-	long facebookLogin(String email, String password) throws RemoteException;
+	long login(String email, String password) throws RemoteException;
 	void logout(long token) throws RemoteException;
 	void createTrainingSession(long token, TrainingSessionDto trainingSession) throws RemoteException;
 	List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException;

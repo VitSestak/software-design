@@ -8,8 +8,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import es.deusto.ingenieria.sd.auctions.server.auth.LoginService;
-import es.deusto.ingenieria.sd.auctions.server.auth.RegistrationService;
+import es.deusto.ingenieria.sd.auctions.server.auth.AuthService;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
@@ -29,31 +28,25 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	@Override
 	public synchronized boolean googleRegistration(UserProfileDto user) throws RemoteException {
 		LOGGER.log(Level.INFO, "Google registration called for username: {}", user.getEmail());
-		return RegistrationService.getInstance().googleRegistration(user);
-	}
-
-	@Override
-	public synchronized long googleLogin(String email, String password) throws RemoteException {
-		LOGGER.log(Level.INFO, "Google login called for username: {}", email);
-		return LoginService.getInstance().googleLogin(email, password);
+		return AuthService.getInstance().googleRegistration(user);
 	}
 
 	@Override
 	public synchronized boolean facebookRegistration(UserProfileDto user) throws RemoteException {
 		LOGGER.log(Level.INFO, "Facebook registration called for username: {}", user.getEmail());
-		return RegistrationService.getInstance().facebookRegistration(user);
+		return AuthService.getInstance().facebookRegistration(user);
 	}
 
 	@Override
-	public synchronized long facebookLogin(String email, String password) throws RemoteException {
-		LOGGER.log(Level.INFO, "Facebook login called for username: {}", email);
-		return LoginService.getInstance().facebookLogin(email, password);
+	public synchronized long login(String email, String password) throws RemoteException {
+		LOGGER.log(Level.INFO, "Google login called for username: {}", email);
+		return AuthService.getInstance().login(email, password);
 	}
 
 	@Override
 	public synchronized void logout(long token) throws RemoteException {
 		LOGGER.log(Level.INFO, "Logout called for token: {}", token);
-		LoginService.getInstance().logout(token);
+		AuthService.getInstance().logout(token);
 	}
 
 	@Override
