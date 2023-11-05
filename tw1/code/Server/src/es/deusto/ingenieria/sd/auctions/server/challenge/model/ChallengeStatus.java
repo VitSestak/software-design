@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ChallengeStatus {
 
-    int progress;
-    String challengeName;
+    private int progress;
+    private String challengeName;
 
 }

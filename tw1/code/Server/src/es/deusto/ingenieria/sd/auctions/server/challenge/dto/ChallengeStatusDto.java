@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class ChallengeStatusDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    int progress;
-    String challengeName;
+    private int progress;
+    private String challengeName;
 
 }

@@ -12,11 +12,11 @@ import java.util.Date;
 public class ChallengeDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    String id;
-    String name;
-    String target;
-    Date startDate;
-    Date endDate;
-    SportType sportType;
+    private String id;
+    private String name;
+    private String target;
+    private Date startDate;
+    private Date endDate;
+    private SportType sportType;
 
 }

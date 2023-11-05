@@ -8,11 +8,11 @@ import java.util.Date;
 @Data
 public class Challenge {
 
-    String id;
-    String name;
-    String target;
-    Date startDate;
-    Date endDate;
-    SportType sportType;
+    private String id;
+    private String name;
+    private String target;
+    private Date startDate;
+    private Date endDate;
+    private SportType sportType;
 
 }
