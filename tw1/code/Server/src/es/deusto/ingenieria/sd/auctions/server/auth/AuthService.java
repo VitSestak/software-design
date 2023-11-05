@@ -1,7 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.server.auth;
 
 import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
-import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
+import es.deusto.ingenieria.sd.auctions.server.user.model.UserProfile;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -31,7 +31,7 @@ public class AuthService {
         return instance;
     }
 
-    public boolean googleRegistration(UserProfileDto user) {
+    public boolean googleRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
             registeredUsers.put(user.getEmail(), AuthProviderType.GOOGLE);
             LOGGER.log(Level.INFO, "Google registration successful for username: {}", user.getEmail());
@@ -41,7 +41,7 @@ public class AuthService {
         return false;
     }
 
-    public boolean facebookRegistration(UserProfileDto user) {
+    public boolean facebookRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
             LOGGER.log(Level.INFO, "Facebook registration successful for username: {}", user.getEmail());
             registeredUsers.put(user.getEmail(), AuthProviderType.FACEBOOK);
@@ -56,7 +56,7 @@ public class AuthService {
     }
 
     public long login(String email, String password) throws RemoteException {
-        long token = -1;
+        long token;
         if (registeredUsers.containsKey(email)) {
             var o = registeredUsers.get(email);
             if (o.equals(AuthProviderType.GOOGLE)) {

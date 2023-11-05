@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import es.deusto.ingenieria.sd.auctions.server.auth.AuthService;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
+import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionMapper;
 import es.deusto.ingenieria.sd.auctions.server.training.service.TrainingService;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
+import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileMapper;
 
 public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
@@ -26,14 +29,16 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	}
 
 	@Override
-	public synchronized boolean googleRegistration(UserProfileDto user) throws RemoteException {
-		LOGGER.log(Level.INFO, "Google registration called for username: {}", user.getEmail());
+	public synchronized boolean googleRegistration(UserProfileDto userDto) throws RemoteException {
+		LOGGER.log(Level.INFO, "Google registration called for username: {}", userDto.getEmail());
+		var user = UserProfileMapper.getInstance().dtoToUserProfile(userDto);
 		return AuthService.getInstance().googleRegistration(user);
 	}
 
 	@Override
-	public synchronized boolean facebookRegistration(UserProfileDto user) throws RemoteException {
-		LOGGER.log(Level.INFO, "Facebook registration called for username: {}", user.getEmail());
+	public synchronized boolean facebookRegistration(UserProfileDto userDto) throws RemoteException {
+		LOGGER.log(Level.INFO, "Facebook registration called for username: {}", userDto.getEmail());
+		var user = UserProfileMapper.getInstance().dtoToUserProfile(userDto);
 		return AuthService.getInstance().facebookRegistration(user);
 	}
 
@@ -50,25 +55,30 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	}
 
 	@Override
-	public synchronized void createTrainingSession(long token, TrainingSessionDto trainingSession) throws RemoteException {
+	public synchronized void createTrainingSession(long token, TrainingSessionDto trainingSessionDto) throws RemoteException {
 		LOGGER.log(Level.INFO, "Creating new training session for user token: {}", token);
-		TrainingService.getInstance().createTrainingSession(trainingSession);
+		var trainingSession = TrainingSessionMapper.getInstance().dtoToTrainingSession(trainingSessionDto);
+		TrainingService.getInstance().createTrainingSession(token, trainingSession);
 	}
 
 	@Override
 	public synchronized List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException {
 		LOGGER.log(Level.INFO, "Getting training sessions for user token: {}", token);
-		return TrainingService.getInstance().getTrainingSessions();
+		var sessions = TrainingService.getInstance().getTrainingSessions(token);
+		return sessions.stream()
+				.map(TrainingSessionMapper.getInstance()::trainingSessionToDto)
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public synchronized TrainingSessionDto getTrainingSession(long token, UUID trainingSessionId) throws RemoteException {
 		LOGGER.log(Level.INFO, "Getting training session for user token: {}", token);
-		return TrainingService.getInstance().getTrainingSession(trainingSessionId);
+		var session = TrainingService.getInstance().getTrainingSession(token, trainingSessionId);
+		return TrainingSessionMapper.getInstance().trainingSessionToDto(session);
 	}
 
 	@Override
-	public synchronized void setUpChallenge(long token, ChallengeDto challenge) throws RemoteException {
+	public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
 		LOGGER.log(Level.INFO, "Setting up new challenge for user token: {}", token);
 	}
 
