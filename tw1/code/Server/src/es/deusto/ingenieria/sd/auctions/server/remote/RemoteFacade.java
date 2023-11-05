@@ -10,13 +10,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import es.deusto.ingenieria.sd.auctions.server.auth.AuthService;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusMapper;
+import es.deusto.ingenieria.sd.auctions.server.challenge.service.ChallengeService;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeMapper;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionMapper;
 import es.deusto.ingenieria.sd.auctions.server.training.service.TrainingService;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileMapper;
+import es.deusto.ingenieria.sd.auctions.server.user.service.UserService;
 
 public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
@@ -56,17 +60,20 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
 	@Override
 	public synchronized void createTrainingSession(long token, TrainingSessionDto trainingSessionDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Creating new training session for user token: " + token);
-		var trainingSession = TrainingSessionMapper.getInstance().dtoToTrainingSession(trainingSessionDto);
-		TrainingService.getInstance().createTrainingSession(token, trainingSession);
+		if (AuthService.getInstance().isLoggedIn(token)) {
+			LOGGER.log(Level.INFO, "Creating new training session for user token: " + token);
+			var trainingSession = TrainingSessionMapper.getInstance().dtoToTrainingSession(trainingSessionDto);
+			TrainingService.getInstance().createTrainingSession(token, trainingSession);
+		}
 	}
 
     @Override
     public synchronized List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException {
         LOGGER.log(Level.INFO, "Getting training sessions for user token: " + token);
         var sessions = TrainingService.getInstance().getTrainingSessions(token);
+		var mapper = TrainingSessionMapper.getInstance();
         return sessions.stream()
-                       .map(TrainingSessionMapper.getInstance()::trainingSessionToDto)
+                       .map(mapper::trainingSessionToDto)
                        .collect(Collectors.toList());
     }
 
@@ -79,27 +86,52 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
     @Override
     public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
-        LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
-        // todo: if user registered -> set up new challenge (globally for everyone)
+		if (AuthService.getInstance().isRegistered()) {
+			LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
+			var challenge = ChallengeMapper.getInstance().dtoToChallenge(challengeDto);
+			ChallengeService.getInstance().setUpNewChallenge(challenge);
+		}
     }
 
     @Override
     public synchronized List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException {
-        LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
-        // todo: if user registered -> return active challenges that he can accept
+		if (AuthService.getInstance().isRegistered()) {
+			LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
+			var challenges = ChallengeService.getInstance().getActiveChallenges();
+			var mapper = ChallengeMapper.getInstance();
+			return challenges.stream()
+					.map(mapper::challengeToDto)
+					.collect(Collectors.toList());
+		}
         return List.of();
     }
 
     @Override
     public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
-        LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
-        // todo: specifically for user
+		if (AuthService.getInstance().isLoggedIn(token)) {
+			LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
+			var userEmail = AuthService.getInstance().getLoggedUserEmail(token);
+			var challenge = ChallengeService.getInstance().getActiveChallenges()
+											.stream()
+											.filter(ac -> ac.getId().equals(challengeId))
+											.findFirst();
+			challenge.ifPresent(ch -> UserService.getInstance().acceptChallenge(userEmail, ch));
+		}
     }
 
     @Override
     public synchronized List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException {
-        LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
-        return List.of();
+		if (AuthService.getInstance().isLoggedIn(token)) {
+			LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
+			var userEmail = AuthService.getInstance().getLoggedUserEmail(token);
+			var acceptedChallenges = UserService.getInstance().getAcceptedChallenges(userEmail);
+			var challengesStatus = ChallengeService.getInstance().getChallengesStatus(acceptedChallenges);
+			var mapper = ChallengeStatusMapper.getInstance();
+			return challengesStatus.stream()
+					.map(mapper::challengeStatusToDto)
+					.collect(Collectors.toList());
+		}
+		return List.of();
     }
 
 	/*public synchronized long login(String email, String password) throws RemoteException {

@@ -86,4 +86,17 @@ public class AuthService {
             throw new RemoteException("User is not not logged in!");
         }
     }
+
+    // todo: only registered or logged in?
+    public boolean isRegistered() {
+        return true;
+    }
+
+    public boolean isLoggedIn(long token) {
+        return loggedUsers.containsKey(token);
+    }
+
+    public String getLoggedUserEmail(long token) {
+        return loggedUsers.getOrDefault(token, null);
+    }
 }
