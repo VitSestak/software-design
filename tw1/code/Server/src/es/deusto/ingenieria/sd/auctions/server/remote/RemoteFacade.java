@@ -61,14 +61,14 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 		TrainingService.getInstance().createTrainingSession(token, trainingSession);
 	}
 
-	@Override
-	public synchronized List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Getting training sessions for user token: " + token);
-		var sessions = TrainingService.getInstance().getTrainingSessions(token);
-		return sessions.stream()
-				.map(TrainingSessionMapper.getInstance()::trainingSessionToDto)
-				.collect(Collectors.toList());
-	}
+    @Override
+    public synchronized List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException {
+        LOGGER.log(Level.INFO, "Getting training sessions for user token: " + token);
+        var sessions = TrainingService.getInstance().getTrainingSessions(token);
+        return sessions.stream()
+                       .map(TrainingSessionMapper.getInstance()::trainingSessionToDto)
+                       .collect(Collectors.toList());
+    }
 
 	@Override
 	public synchronized TrainingSessionDto getTrainingSession(long token, UUID trainingSessionId) throws RemoteException {
@@ -77,27 +77,30 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 		return TrainingSessionMapper.getInstance().trainingSessionToDto(session);
 	}
 
-	@Override
-	public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
-	}
+    @Override
+    public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
+        LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
+        // todo: if user registered -> set up new challenge (globally for everyone)
+    }
 
-	@Override
-	public synchronized List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
-		return null;
-	}
+    @Override
+    public synchronized List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException {
+        LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
+        // todo: if user registered -> return active challenges that he can accept
+        return List.of();
+    }
 
-	@Override
-	public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
-		LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
-	}
+    @Override
+    public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
+        LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
+        // todo: specifically for user
+    }
 
-	@Override
-	public synchronized List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
-		return null;
-	}
+    @Override
+    public synchronized List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException {
+        LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
+        return List.of();
+    }
 
 	/*public synchronized long login(String email, String password) throws RemoteException {
 		System.out.println(" * RemoteFacade login: " + email + " / " + password);

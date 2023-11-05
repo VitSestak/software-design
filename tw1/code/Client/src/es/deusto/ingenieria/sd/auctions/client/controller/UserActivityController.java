@@ -36,6 +36,15 @@ public class UserActivityController {
         return List.of();
     }
 
+    public TrainingSessionDto getTrainingSession(long token, UUID sessionId) {
+        try {
+            return serviceLocator.getService().getTrainingSession(token, sessionId);
+        } catch (RemoteException e) {
+            LOGGER.severe("Error when fetching training session: " + e);
+        }
+        return null;
+    }
+
     public void setUpChallenge(long token, ChallengeDto challengeDto) {
         try {
             serviceLocator.getService().setUpChallenge(token, challengeDto);

@@ -60,12 +60,12 @@ public class AuthService {
         if (registeredUsers.containsKey(email)) {
             var o = registeredUsers.get(email);
             if (o.equals(AuthProviderType.GOOGLE)) {
-                LOGGER.log(Level.INFO, "Logging to Google with username: " + email);
+                LOGGER.log(Level.INFO, "Logging to Google with email: " + email + " and password: " + password);
                 // google verification process...
                 token = new Date().getTime();
                 loggedUsers.put(token, email);
             } else {
-                LOGGER.log(Level.INFO, "Logging to Facebook with username: " + email);
+                LOGGER.log(Level.INFO, "Logging to Facebook with email: " + email + " and password: " + password);
                 // facebook verification process...
                 token = new Date().getTime();
                 loggedUsers.put(token, email);

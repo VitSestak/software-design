@@ -1,12 +1,11 @@
 package es.deusto.ingenieria.sd.auctions.client;
 
-import es.deusto.ingenieria.sd.auctions.client.controller.BidController;
 import es.deusto.ingenieria.sd.auctions.client.controller.AuthController;
 import es.deusto.ingenieria.sd.auctions.client.controller.UserActivityController;
-import es.deusto.ingenieria.sd.auctions.client.gui.BidWindow;
 import es.deusto.ingenieria.sd.auctions.client.gui.AuthDialog;
 import es.deusto.ingenieria.sd.auctions.client.gui.UserActivityDashboard;
 import es.deusto.ingenieria.sd.auctions.client.remote.ServiceLocator;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.auctions.server.common.SportType;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
@@ -30,9 +29,6 @@ public class MainProgram {
 		UserActivityController userActivityController = new UserActivityController(serviceLocator);
 		UserActivityDashboard userActivityDashboard = new UserActivityDashboard(userActivityController);
 
-		BidController bidController = new BidController(serviceLocator);			
-		BidWindow bidWindow = new BidWindow(bidController);
-
 		// Create a user profile
 		String password = "password";
 		var userProfileDto = UserProfileDto.builder()
@@ -55,32 +51,34 @@ public class MainProgram {
 										.distance(10)
 										.build();
 
+		// Create a challenge
+		var challengeDto = ChallengeDto.builder()
+									   .id(UUID.randomUUID())
+									   .name("Challenge 1")
+									   .sportType(SportType.RUNNING)
+									   .startDate(new Date())
+									   .endDate(new Date())
+									   .target("60min")
+									   .build();
+
 		// Test scenario
 		if (authDialog.registerWithGoogle(userProfileDto)) {
 			if (authDialog.login(userProfileDto.getEmail(), password)) {
 				long userToken = authController.getToken();
-				// do something
+
 				userActivityDashboard.displayTrainingSessions(userToken);
 				userActivityDashboard.createTrainingSession(userToken, trainingSessionDto);
 				userActivityDashboard.displayTrainingSessions(userToken);
 
+				userActivityDashboard.setUpChallenge(userToken, challengeDto);
+				var activeChallenges = userActivityDashboard.displayActiveChallenges(userToken);
+				if (activeChallenges.size() > 0) {
+					userActivityDashboard.acceptChallenge(userToken, activeChallenges.get(0).getId());
+					userActivityDashboard.displayAcceptedChallengesStatus(userToken);
+				}
+
 				authDialog.logout();
 			}
 		}
-
-		/*
-		//Get Categories
-		List<CategoryDTO> categories = bidWindow.getCategories();
-		//Get Articles of a category (first category is selected)
-		List<ArticleDTO> articles = bidWindow.getArticles(categories.get(0).getName());
-		//Convert currency to GBP
-		bidWindow.currencyToGBP(articles);
-		//Convert currency to USD
-		bidWindow.currencyToUSD(articles);
-		//Place a bid (first article of the category is selected; the token is stored in the BidController)
-		bidWindow.makeBid(loginController.getToken(), articles.get(0));
-		//Get Articles to check if the bid has been done
-		articles = bidWindow.getArticles(categories.get(0).getName());*/
-		//Logout
 	}
 }
