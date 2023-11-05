@@ -69,9 +69,9 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	}
 
 	@Override
-	public synchronized TrainingSessionDto getTrainingSession(long token, UUID uuid) throws RemoteException {
+	public synchronized TrainingSessionDto getTrainingSession(long token, UUID trainingSessionId) throws RemoteException {
 		LOGGER.log(Level.INFO, "Getting training session for user token: {}", token);
-		return TrainingService.getInstance().getTrainingSession(uuid);
+		return TrainingService.getInstance().getTrainingSession(trainingSessionId);
 	}
 
 	@Override
@@ -86,8 +86,8 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	}
 
 	@Override
-	public synchronized void acceptChallenge(long token, String challengeId) throws RemoteException {
-		LOGGER.log(Level.INFO, "Accepting challenge for user token: {}", token);
+	public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
+		LOGGER.log(Level.INFO, "Accepting challenge: {}", challengeId);
 	}
 
 	@Override

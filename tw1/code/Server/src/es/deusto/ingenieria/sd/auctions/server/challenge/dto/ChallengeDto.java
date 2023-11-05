@@ -6,13 +6,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Data
 public class ChallengeDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private UUID id;
     private String name;
     private String target;
     private Date startDate;

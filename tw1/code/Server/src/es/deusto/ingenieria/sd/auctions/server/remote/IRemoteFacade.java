@@ -20,10 +20,10 @@ public interface IRemoteFacade extends Remote {
 	void logout(long token) throws RemoteException;
 	void createTrainingSession(long token, TrainingSessionDto trainingSession) throws RemoteException;
 	List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException;
-	TrainingSessionDto getTrainingSession(long token, UUID uuid) throws RemoteException;
+	TrainingSessionDto getTrainingSession(long token, UUID trainingSessionId) throws RemoteException;
 	void setUpChallenge(long token, ChallengeDto challenge) throws RemoteException;
 	List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException;
-	void acceptChallenge(long token, String challengeId) throws RemoteException;
+	void acceptChallenge(long token, UUID challengeId) throws RemoteException;
 	List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException;
 
 
