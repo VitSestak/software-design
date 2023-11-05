@@ -10,11 +10,15 @@ public class AuthDialog {
 	private final AuthController authController;
 
 	public boolean registerWithGoogle(UserProfileDto userProfileDto) {
-		return authController.registerWithGoogle(userProfileDto);
+		var res = authController.registerWithGoogle(userProfileDto);
+		System.out.println(res ? "Registered successfully with Google account." : "Error when registering new user.");
+		return res;
 	}
 
 	public boolean registerWithFacebook(UserProfileDto userProfileDto) {
-		return authController.registerWithFacebook(userProfileDto);
+		var res = authController.registerWithFacebook(userProfileDto);
+		System.out.println(res ? "Registered successfully with Facebook account." : "Error when registering new user.");
+		return res;
 	}
 
 	public boolean login(String email, String password) {
@@ -23,15 +27,14 @@ public class AuthDialog {
 		System.out.println("\t* Password hash: " + sha1Password);
 		boolean result = authController.login(email, sha1Password);
 		System.out.println("\t* Login result: " + result);
-		System.out.println("\t* Token: " + this.authController.getToken());
+		System.out.println("\t* Token: " + authController.getToken());
 
 		return result;
 	}
 	
 	public void logout() {
 		System.out.println(" - Logout from the server...");		
-		this.authController.logout();
-		System.out.println("\t* Logout success!");		
-
+		authController.logout();
+		System.out.println("\t* Logout success!");
 	}
 }

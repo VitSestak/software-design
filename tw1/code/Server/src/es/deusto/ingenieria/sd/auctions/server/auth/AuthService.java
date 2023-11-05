@@ -34,20 +34,20 @@ public class AuthService {
     public boolean googleRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
             registeredUsers.put(user.getEmail(), AuthProviderType.GOOGLE);
-            LOGGER.log(Level.INFO, "Google registration successful for username: {}", user.getEmail());
+            LOGGER.log(Level.INFO, "Google registration successful for username: " + user.getEmail());
             return true;
         }
-        LOGGER.log(Level.INFO, "Google registration failed for username: {}", user.getEmail());
+        LOGGER.log(Level.INFO, "Google registration failed for username: " + user.getEmail());
         return false;
     }
 
     public boolean facebookRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
-            LOGGER.log(Level.INFO, "Facebook registration successful for username: {}", user.getEmail());
+            LOGGER.log(Level.INFO, "Facebook registration successful for username: " + user.getEmail());
             registeredUsers.put(user.getEmail(), AuthProviderType.FACEBOOK);
             return true;
         }
-        LOGGER.log(Level.INFO, "Facebook registration failed for username: {}", user.getEmail());
+        LOGGER.log(Level.INFO, "Facebook registration failed for username: " + user.getEmail());
         return false;
     }
 
@@ -60,18 +60,18 @@ public class AuthService {
         if (registeredUsers.containsKey(email)) {
             var o = registeredUsers.get(email);
             if (o.equals(AuthProviderType.GOOGLE)) {
-                LOGGER.log(Level.INFO, "Logging to Google with username: {}", email);
+                LOGGER.log(Level.INFO, "Logging to Google with username: " + email);
                 // google verification process...
                 token = new Date().getTime();
                 loggedUsers.put(token, email);
             } else {
-                LOGGER.log(Level.INFO, "Logging to Facebook with username: {}", email);
+                LOGGER.log(Level.INFO, "Logging to Facebook with username: " + email);
                 // facebook verification process...
                 token = new Date().getTime();
                 loggedUsers.put(token, email);
             }
         } else {
-            LOGGER.log(Level.SEVERE, "User {} is not registered!", email);
+            LOGGER.log(Level.SEVERE, "User " + email + " is not registered!");
             throw new RemoteException("Login failed! User is not registered.");
         }
         return token;
@@ -80,9 +80,9 @@ public class AuthService {
     public void logout(long token) throws RemoteException {
         if (loggedUsers.containsKey(token)) {
             loggedUsers.remove(token);
-            LOGGER.log(Level.INFO, "User with token {} successfully logged out", token);
+            LOGGER.log(Level.INFO, "User with token " + token + " successfully logged out");
         } else {
-            LOGGER.log(Level.SEVERE, "User with token {} not found!", token);
+            LOGGER.log(Level.SEVERE, "User with token " + token + " not found!");
             throw new RemoteException("User is not not logged in!");
         }
     }

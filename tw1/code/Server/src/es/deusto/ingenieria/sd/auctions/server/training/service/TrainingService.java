@@ -35,11 +35,11 @@ public class TrainingService {
         } else {
             userTrainingSessionsMap.put(token, List.of(trainingSession));
         }
-        LOGGER.log(Level.INFO, "Created a new training session: {}", trainingSession);
+        LOGGER.log(Level.INFO, "Created a new training session: " + trainingSession);
     }
 
     public TrainingSession getTrainingSession(long token, UUID id) throws RemoteException {
-        LOGGER.log(Level.INFO, "Getting a training session for id: {}", id);
+        LOGGER.log(Level.INFO, "Getting a training session for id: " + id);
         var trainingSession = userTrainingSessionsMap
                 .getOrDefault(token, List.of())
                 .stream()

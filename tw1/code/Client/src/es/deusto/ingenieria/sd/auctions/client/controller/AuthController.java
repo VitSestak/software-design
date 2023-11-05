@@ -37,21 +37,21 @@ public class AuthController {
 
     public boolean login(String email, String password) {
         try {
-            this.token = this.serviceLocator.getService().login(email, password);
+            token = serviceLocator.getService().login(email, password);
             return true;
         } catch (RemoteException e) {
-            System.out.println("# Error during login: " + e);
-            this.token = -1;
+            LOGGER.log(Level.SEVERE, "Error during login: " + e);
+            token = -1;
             return false;
         }
     }
 
     public void logout() {
         try {
-            this.serviceLocator.getService().logout(this.token);
-            this.token = -1;
+            serviceLocator.getService().logout(token);
+            token = -1;
         } catch (RemoteException e) {
-            System.out.println("# Error during logout: " + e);
+            LOGGER.log(Level.SEVERE, "Error during logout: " + e);
         }
     }
 

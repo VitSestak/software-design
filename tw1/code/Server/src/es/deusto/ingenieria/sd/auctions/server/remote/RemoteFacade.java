@@ -30,40 +30,40 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
 	@Override
 	public synchronized boolean googleRegistration(UserProfileDto userDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Google registration called for username: {}", userDto.getEmail());
+		LOGGER.log(Level.INFO, "Google registration called for username: " + userDto.getEmail());
 		var user = UserProfileMapper.getInstance().dtoToUserProfile(userDto);
 		return AuthService.getInstance().googleRegistration(user);
 	}
 
 	@Override
 	public synchronized boolean facebookRegistration(UserProfileDto userDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Facebook registration called for username: {}", userDto.getEmail());
+		LOGGER.log(Level.INFO, "Facebook registration called for username: " + userDto.getEmail());
 		var user = UserProfileMapper.getInstance().dtoToUserProfile(userDto);
 		return AuthService.getInstance().facebookRegistration(user);
 	}
 
 	@Override
 	public synchronized long login(String email, String password) throws RemoteException {
-		LOGGER.log(Level.INFO, "Google login called for username: {}", email);
+		LOGGER.log(Level.INFO, "Google login called for username: " + email);
 		return AuthService.getInstance().login(email, password);
 	}
 
 	@Override
 	public synchronized void logout(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Logout called for token: {}", token);
+		LOGGER.log(Level.INFO, "Logout called for token: " + token);
 		AuthService.getInstance().logout(token);
 	}
 
 	@Override
 	public synchronized void createTrainingSession(long token, TrainingSessionDto trainingSessionDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Creating new training session for user token: {}", token);
+		LOGGER.log(Level.INFO, "Creating new training session for user token: " + token);
 		var trainingSession = TrainingSessionMapper.getInstance().dtoToTrainingSession(trainingSessionDto);
 		TrainingService.getInstance().createTrainingSession(token, trainingSession);
 	}
 
 	@Override
 	public synchronized List<TrainingSessionDto> getTrainingSessions(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Getting training sessions for user token: {}", token);
+		LOGGER.log(Level.INFO, "Getting training sessions for user token: " + token);
 		var sessions = TrainingService.getInstance().getTrainingSessions(token);
 		return sessions.stream()
 				.map(TrainingSessionMapper.getInstance()::trainingSessionToDto)
@@ -72,30 +72,30 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
 	@Override
 	public synchronized TrainingSessionDto getTrainingSession(long token, UUID trainingSessionId) throws RemoteException {
-		LOGGER.log(Level.INFO, "Getting training session for user token: {}", token);
+		LOGGER.log(Level.INFO, "Getting training session for user token: " + token);
 		var session = TrainingService.getInstance().getTrainingSession(token, trainingSessionId);
 		return TrainingSessionMapper.getInstance().trainingSessionToDto(session);
 	}
 
 	@Override
 	public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
-		LOGGER.log(Level.INFO, "Setting up new challenge for user token: {}", token);
+		LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
 	}
 
 	@Override
 	public synchronized List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Downloading active challenges for user token: {}", token);
+		LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
 		return null;
 	}
 
 	@Override
 	public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
-		LOGGER.log(Level.INFO, "Accepting challenge: {}", challengeId);
+		LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
 	}
 
 	@Override
 	public synchronized List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException {
-		LOGGER.log(Level.INFO, "Checking challenges status for user token: {}", token);
+		LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
 		return null;
 	}
 

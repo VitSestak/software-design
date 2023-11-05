@@ -2,14 +2,21 @@ package es.deusto.ingenieria.sd.auctions.client;
 
 import es.deusto.ingenieria.sd.auctions.client.controller.BidController;
 import es.deusto.ingenieria.sd.auctions.client.controller.AuthController;
+import es.deusto.ingenieria.sd.auctions.client.controller.UserActivityController;
 import es.deusto.ingenieria.sd.auctions.client.gui.BidWindow;
 import es.deusto.ingenieria.sd.auctions.client.gui.AuthDialog;
+import es.deusto.ingenieria.sd.auctions.client.gui.UserActivityDashboard;
 import es.deusto.ingenieria.sd.auctions.client.remote.ServiceLocator;
+import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
+import es.deusto.ingenieria.sd.auctions.server.common.SportType;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
+
+import java.util.Date;
+import java.util.UUID;
 
 public class MainProgram {
 
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
 		ServiceLocator serviceLocator = new ServiceLocator();
 		
 		// args[0] = RMIRegistry IP
@@ -20,27 +27,43 @@ public class MainProgram {
 		AuthController authController = new AuthController(serviceLocator);
 		AuthDialog authDialog = new AuthDialog(authController);
 
+		UserActivityController userActivityController = new UserActivityController(serviceLocator);
+		UserActivityDashboard userActivityDashboard = new UserActivityDashboard(userActivityController);
+
 		BidController bidController = new BidController(serviceLocator);			
 		BidWindow bidWindow = new BidWindow(bidController);
 
 		// Create a user profile
 		String password = "password";
-		var userProfile = UserProfileDto.builder()
+		var userProfileDto = UserProfileDto.builder()
 										.email("test@gmail.com")
 										.name("John Kennedy")
 										.height(180)
-					  					.weight(80)
-					  					.restHeartRate(80)
-					  					.maxHearthRate(150)
-					  					.birthDate("14.11.2000")
+										.weight(80)
+										.restHeartRate(80)
+										.maxHearthRate(150)
+										.birthDate("14.11.2000")
+										.build();
+
+		// Create a training session
+		var trainingSessionDto = TrainingSessionDto.builder()
+										.id(UUID.randomUUID())
+										.title("Training Session 1")
+										.sportType(SportType.RUNNING)
+										.startDate(new Date())
+										.startTime("10:30")
+										.distance(10)
 										.build();
 
 		// Test scenario
-		if (authDialog.registerWithGoogle(userProfile)) {
-			if (authDialog.login(userProfile.getEmail(), password)) {
+		if (authDialog.registerWithGoogle(userProfileDto)) {
+			if (authDialog.login(userProfileDto.getEmail(), password)) {
+				long userToken = authController.getToken();
 				// do something
-				// ...
-				// ...
+				userActivityDashboard.displayTrainingSessions(userToken);
+				userActivityDashboard.createTrainingSession(userToken, trainingSessionDto);
+				userActivityDashboard.displayTrainingSessions(userToken);
+
 				authDialog.logout();
 			}
 		}
