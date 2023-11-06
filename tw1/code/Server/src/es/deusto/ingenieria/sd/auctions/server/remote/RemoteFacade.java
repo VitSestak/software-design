@@ -110,7 +110,7 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
     public synchronized void acceptChallenge(long token, UUID challengeId) throws RemoteException {
 		if (AuthService.getInstance().isLoggedIn(token)) {
 			LOGGER.log(Level.INFO, "Accepting challenge: " + challengeId);
-			var userEmail = AuthService.getInstance().getLoggedUserEmail(token);
+			var userEmail = AuthService.getInstance().getLoggedUserProfile(token).getEmail();
 			var challenge = ChallengeService.getInstance().getActiveChallenges()
 											.stream()
 											.filter(ac -> ac.getId().equals(challengeId))
@@ -123,7 +123,7 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
     public synchronized List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException {
 		if (AuthService.getInstance().isLoggedIn(token)) {
 			LOGGER.log(Level.INFO, "Checking challenges status for user token: " + token);
-			var userEmail = AuthService.getInstance().getLoggedUserEmail(token);
+			var userEmail = AuthService.getInstance().getLoggedUserProfile(token).getEmail();
 			var acceptedChallenges = UserService.getInstance().getAcceptedChallenges(userEmail);
 			var challengesStatus = ChallengeService.getInstance().getChallengesStatus(acceptedChallenges);
 			var mapper = ChallengeStatusMapper.getInstance();

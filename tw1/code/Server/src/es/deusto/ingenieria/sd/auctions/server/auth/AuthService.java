@@ -4,9 +4,7 @@ import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
 import es.deusto.ingenieria.sd.auctions.server.user.model.UserProfile;
 
 import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,12 +14,15 @@ public class AuthService {
 
     private static AuthService instance;
 
-    private final Map<String, AuthProviderType> registeredUsers;
-    private final Map<Long, String> loggedUsers;
+    private final Map<String, AuthProviderType> userAuthProviderMap;
+    private final Map<Long, String> loggedUsersMap;
+
+    private final List<UserProfile> userProfiles;
 
     private AuthService() {
-        registeredUsers = new HashMap<>();
-        loggedUsers = new HashMap<>();
+        userAuthProviderMap = new HashMap<>();
+        loggedUsersMap = new HashMap<>();
+        userProfiles = new ArrayList<>();
     }
 
     public static synchronized AuthService getInstance() {
@@ -33,8 +34,9 @@ public class AuthService {
 
     public boolean googleRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
-            registeredUsers.put(user.getEmail(), AuthProviderType.GOOGLE);
             LOGGER.log(Level.INFO, "Google registration successful for username: " + user.getEmail());
+            userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
+            userProfiles.add(user);
             return true;
         }
         LOGGER.log(Level.INFO, "Google registration failed for username: " + user.getEmail());
@@ -44,7 +46,8 @@ public class AuthService {
     public boolean facebookRegistration(UserProfile user) {
         if (validateEmail(user.getEmail())) {
             LOGGER.log(Level.INFO, "Facebook registration successful for username: " + user.getEmail());
-            registeredUsers.put(user.getEmail(), AuthProviderType.FACEBOOK);
+            userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
+            userProfiles.add(user);
             return true;
         }
         LOGGER.log(Level.INFO, "Facebook registration failed for username: " + user.getEmail());
@@ -52,23 +55,23 @@ public class AuthService {
     }
 
     private boolean validateEmail(String email) {
-        return !registeredUsers.containsKey(email);
+        return !userAuthProviderMap.containsKey(email);
     }
 
     public long login(String email, String password) throws RemoteException {
         long token;
-        if (registeredUsers.containsKey(email)) {
-            var o = registeredUsers.get(email);
+        if (userAuthProviderMap.containsKey(email)) {
+            var o = userAuthProviderMap.get(email);
             if (o.equals(AuthProviderType.GOOGLE)) {
                 LOGGER.log(Level.INFO, "Logging to Google with email: " + email + " and password: " + password);
                 // google verification process...
                 token = new Date().getTime();
-                loggedUsers.put(token, email);
+                loggedUsersMap.put(token, email);
             } else {
                 LOGGER.log(Level.INFO, "Logging to Facebook with email: " + email + " and password: " + password);
                 // facebook verification process...
                 token = new Date().getTime();
-                loggedUsers.put(token, email);
+                loggedUsersMap.put(token, email);
             }
         } else {
             LOGGER.log(Level.SEVERE, "User " + email + " is not registered!");
@@ -78,8 +81,8 @@ public class AuthService {
     }
 
     public void logout(long token) throws RemoteException {
-        if (loggedUsers.containsKey(token)) {
-            loggedUsers.remove(token);
+        if (loggedUsersMap.containsKey(token)) {
+            loggedUsersMap.remove(token);
             LOGGER.log(Level.INFO, "User with token " + token + " successfully logged out");
         } else {
             LOGGER.log(Level.SEVERE, "User with token " + token + " not found!");
@@ -93,10 +96,14 @@ public class AuthService {
     }
 
     public boolean isLoggedIn(long token) {
-        return loggedUsers.containsKey(token);
+        return loggedUsersMap.containsKey(token);
     }
 
-    public String getLoggedUserEmail(long token) {
-        return loggedUsers.getOrDefault(token, null);
+    public UserProfile getLoggedUserProfile(long token) {
+        var email = loggedUsersMap.get(token);
+        if (email != null) {
+            return userProfiles.stream().filter(up -> up.getEmail().equals(email)).findFirst().orElse(null);
+        }
+        return null;
     }
 }
