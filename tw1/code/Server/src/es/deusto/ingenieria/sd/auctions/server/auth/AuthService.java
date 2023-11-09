@@ -90,11 +90,6 @@ public class AuthService {
         }
     }
 
-    // todo: only registered or logged in?
-    public boolean isRegistered() {
-        return true;
-    }
-
     public boolean isLoggedIn(long token) {
         return loggedUsersMap.containsKey(token);
     }

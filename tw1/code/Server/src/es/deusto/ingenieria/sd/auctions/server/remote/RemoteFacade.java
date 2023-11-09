@@ -86,7 +86,7 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
     @Override
     public synchronized void setUpChallenge(long token, ChallengeDto challengeDto) throws RemoteException {
-		if (AuthService.getInstance().isRegistered()) {
+		if (AuthService.getInstance().isLoggedIn(token)) {
 			LOGGER.log(Level.INFO, "Setting up new challenge for user token: " + token);
 			var challenge = ChallengeMapper.getInstance().dtoToChallenge(challengeDto);
 			ChallengeService.getInstance().setUpNewChallenge(challenge);
@@ -95,7 +95,7 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
     @Override
     public synchronized List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException {
-		if (AuthService.getInstance().isRegistered()) {
+		if (AuthService.getInstance().isLoggedIn(token)) {
 			LOGGER.log(Level.INFO, "Downloading active challenges for user token: " + token);
 			var challenges = ChallengeService.getInstance().getActiveChallenges();
 			var mapper = ChallengeMapper.getInstance();
