@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Server/lib/commons-codec-1.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Server/lib/CurrencyExchange.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

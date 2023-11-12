@@ -45,6 +45,8 @@ int weight;
 int height;
 int maxHearthRate;
 int restHeartRate;
+List<Challenge> challenges;
+List<TrainingSession> trainingSessions;
 ```
 
 
@@ -71,6 +73,7 @@ String target;
 Date startDate;
 Date endDate;
 SportType sportType;
+ChallengeStatus challengeStatus;
 ```
 
 
@@ -78,8 +81,8 @@ SportType sportType;
 **ChallengeStatusDTO**
 
 ```java
-int progress;
-String challengeName;
+float progress;
+UUID challengeId;
 ```
 
 
