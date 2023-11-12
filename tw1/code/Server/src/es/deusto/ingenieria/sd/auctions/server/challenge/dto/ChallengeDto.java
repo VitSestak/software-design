@@ -1,6 +1,5 @@
 package es.deusto.ingenieria.sd.auctions.server.challenge.dto;
 
-import es.deusto.ingenieria.sd.auctions.server.challenge.model.ChallengeStatus;
 import es.deusto.ingenieria.sd.auctions.server.common.SportType;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +19,6 @@ public class ChallengeDto implements Serializable {
     private Date startDate;
     private Date endDate;
     private SportType sportType;
-    private ChallengeStatus challengeStatus;
+    private ChallengeStatusDto challengeStatus;
 
 }

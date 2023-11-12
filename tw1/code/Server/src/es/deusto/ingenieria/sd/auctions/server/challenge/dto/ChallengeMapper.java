@@ -1,6 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.server.challenge.dto;
 
 import es.deusto.ingenieria.sd.auctions.server.challenge.model.Challenge;
+import es.deusto.ingenieria.sd.auctions.server.challenge.model.ChallengeStatus;
 
 public class ChallengeMapper {
 
@@ -23,7 +24,10 @@ public class ChallengeMapper {
                 .startDate(challenge.getStartDate())
                 .endDate(challenge.getEndDate())
                 .sportType(challenge.getSportType())
-                .challengeStatus(challenge.getChallengeStatus())
+                .challengeStatus(ChallengeStatusDto.builder()
+                                                   .challengeId(challenge.getChallengeStatus().getChallengeId())
+                                                   .progress(challenge.getChallengeStatus().getProgress())
+                                                   .build())
                 .build();
     }
 
@@ -35,7 +39,10 @@ public class ChallengeMapper {
                 .endDate(challengeDto.getEndDate())
                 .sportType(challengeDto.getSportType())
                 .target(challengeDto.getTarget())
-                .challengeStatus(challengeDto.getChallengeStatus())
+                .challengeStatus(ChallengeStatus.builder()
+                                                .challengeId(challengeDto.getChallengeStatus().getChallengeId())
+                                                .progress(challengeDto.getChallengeStatus().getProgress())
+                                                .build())
                 .build();
     }
 }
