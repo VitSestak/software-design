@@ -6,6 +6,7 @@ import es.deusto.ingenieria.sd.auctions.client.gui.AuthDialog;
 import es.deusto.ingenieria.sd.auctions.client.gui.UserActivityDashboard;
 import es.deusto.ingenieria.sd.auctions.client.remote.ServiceLocator;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.auctions.server.common.SportType;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
@@ -51,14 +52,20 @@ public class MainProgram {
 										.distance(10)
 										.build();
 
+		var challengeStatusDto = ChallengeStatusDto.builder()
+												   .challengeId(UUID.randomUUID())
+												   .progress(0.1f)
+												   .build();
+
 		// Create a challenge
 		var challengeDto = ChallengeDto.builder()
-									   .id(UUID.randomUUID())
+									   .id(challengeStatusDto.getChallengeId())
 									   .name("Challenge 1")
 									   .sportType(SportType.RUNNING)
 									   .startDate(new Date())
 									   .endDate(new Date())
 									   .target("60min")
+									   .challengeStatus(challengeStatusDto)
 									   .build();
 
 		// Test scenario

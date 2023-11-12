@@ -87,7 +87,7 @@ public class UserActivityDashboard {
         System.out.println("Getting challenges status for token " + token);
         var status = userActivityController.checkAcceptedChallengesStatus(token);
         status.forEach(s -> {
-            System.out.println(s.getChallengeName());
+            System.out.println(s.getChallengeId());
             System.out.println(s.getProgress());
         });
         if (status.isEmpty()) {
