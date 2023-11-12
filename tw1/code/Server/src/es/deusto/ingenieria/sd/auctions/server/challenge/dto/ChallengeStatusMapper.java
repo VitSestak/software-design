@@ -17,14 +17,14 @@ public class ChallengeStatusMapper {
 
     public ChallengeStatusDto challengeStatusToDto(ChallengeStatus challengeStatus) {
         return ChallengeStatusDto.builder()
-                                 .challengeName(challengeStatus.getChallengeName())
+                                 .challengeId(challengeStatus.getChallengeId())
                                  .progress(challengeStatus.getProgress())
                                  .build();
     }
 
     public ChallengeStatus dtoToChallengeStatus(ChallengeStatusDto challengeStatusDto) {
         return ChallengeStatus.builder()
-                              .challengeName(challengeStatusDto.getChallengeName())
+                              .challengeId(challengeStatusDto.getChallengeId())
                               .progress(challengeStatusDto.getProgress())
                               .build();
     }

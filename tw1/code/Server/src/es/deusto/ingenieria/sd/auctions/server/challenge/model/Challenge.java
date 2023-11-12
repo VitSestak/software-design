@@ -17,5 +17,6 @@ public class Challenge {
     private Date startDate;
     private Date endDate;
     private SportType sportType;
+    private ChallengeStatus challengeStatus;
 
 }

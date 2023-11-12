@@ -23,6 +23,7 @@ public class ChallengeMapper {
                 .startDate(challenge.getStartDate())
                 .endDate(challenge.getEndDate())
                 .sportType(challenge.getSportType())
+                .challengeStatus(challenge.getChallengeStatus())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class ChallengeMapper {
                 .endDate(challengeDto.getEndDate())
                 .sportType(challengeDto.getSportType())
                 .target(challengeDto.getTarget())
+                .challengeStatus(challengeDto.getChallengeStatus())
                 .build();
     }
 }

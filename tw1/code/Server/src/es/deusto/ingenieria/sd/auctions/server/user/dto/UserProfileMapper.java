@@ -17,25 +17,29 @@ public class UserProfileMapper {
 
     public UserProfileDto userProfileToDto(UserProfile userProfile) {
         return UserProfileDto.builder()
-                .email(userProfile.getEmail())
-                .name(userProfile.getName())
-                .birthDate(userProfile.getBirthDate())
-                .weight(userProfile.getWeight())
-                .height(userProfile.getHeight())
-                .maxHearthRate(userProfile.getMaxHearthRate())
-                .restHeartRate(userProfile.getRestHeartRate())
-                .build();
+                             .email(userProfile.getEmail())
+                             .name(userProfile.getName())
+                             .birthDate(userProfile.getBirthDate())
+                             .weight(userProfile.getWeight())
+                             .height(userProfile.getHeight())
+                             .maxHearthRate(userProfile.getMaxHearthRate())
+                             .restHeartRate(userProfile.getRestHeartRate())
+                             .challenges(userProfile.getChallenges())
+                             .trainingSessions(userProfile.getTrainingSessions())
+                             .build();
     }
 
     public UserProfile dtoToUserProfile(UserProfileDto userProfileDto) {
         return UserProfile.builder()
-                             .email(userProfileDto.getEmail())
-                             .name(userProfileDto.getName())
-                             .birthDate(userProfileDto.getBirthDate())
-                             .weight(userProfileDto.getWeight())
-                             .height(userProfileDto.getHeight())
-                             .maxHearthRate(userProfileDto.getMaxHearthRate())
-                             .restHeartRate(userProfileDto.getRestHeartRate())
-                             .build();
+                          .email(userProfileDto.getEmail())
+                          .name(userProfileDto.getName())
+                          .birthDate(userProfileDto.getBirthDate())
+                          .weight(userProfileDto.getWeight())
+                          .height(userProfileDto.getHeight())
+                          .maxHearthRate(userProfileDto.getMaxHearthRate())
+                          .restHeartRate(userProfileDto.getRestHeartRate())
+                          .challenges(userProfileDto.getChallenges())
+                          .trainingSessions(userProfileDto.getTrainingSessions())
+                          .build();
     }
 }
