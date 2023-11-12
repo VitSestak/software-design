@@ -21,11 +21,11 @@ public class UserProfile {
     private List<Challenge> challenges;
     private List<TrainingSession> trainingSessions;
 
-    private void setUpChallenge(Challenge challenge) {
+    public void setUpChallenge(Challenge challenge) {
         challenges.add(challenge);
     }
 
-    private void createTrainingSession(TrainingSession trainingSession) {
+    public void createTrainingSession(TrainingSession trainingSession) {
         trainingSessions.add(trainingSession);
     }
 }
