@@ -24,8 +24,6 @@ public class UserProfileMapper {
                              .height(userProfile.getHeight())
                              .maxHearthRate(userProfile.getMaxHearthRate())
                              .restHeartRate(userProfile.getRestHeartRate())
-                             .challenges(userProfile.getChallenges())
-                             .trainingSessions(userProfile.getTrainingSessions())
                              .build();
     }
 
@@ -38,8 +36,6 @@ public class UserProfileMapper {
                           .height(userProfileDto.getHeight())
                           .maxHearthRate(userProfileDto.getMaxHearthRate())
                           .restHeartRate(userProfileDto.getRestHeartRate())
-                          .challenges(userProfileDto.getChallenges())
-                          .trainingSessions(userProfileDto.getTrainingSessions())
                           .build();
     }
 }

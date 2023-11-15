@@ -1,6 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.client.controller;
 
 import es.deusto.ingenieria.sd.auctions.client.remote.ServiceLocator;
+import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 
@@ -17,20 +18,11 @@ public class AuthController {
 
     private long token = -1;
 
-    public boolean registerWithGoogle(UserProfileDto userProfileDto) {
+    public boolean register(UserProfileDto userProfileDto, AuthProviderType authProviderType) {
         try {
-            return serviceLocator.getService().googleRegistration(userProfileDto);
+            return serviceLocator.getService().register(userProfileDto, authProviderType);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error during Google login. Msg: {}", e);
-            return false;
-        }
-    }
-
-    public boolean registerWithFacebook(UserProfileDto userProfileDto) {
-        try {
-            return serviceLocator.getService().facebookRegistration(userProfileDto);
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error during Facebook login. Msg: {}", e);
+            LOGGER.log(Level.SEVERE, "Error during registration. Error: " + e);
             return false;
         }
     }

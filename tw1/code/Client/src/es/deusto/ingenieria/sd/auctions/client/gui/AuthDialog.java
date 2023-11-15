@@ -1,6 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.client.gui;
 
 import es.deusto.ingenieria.sd.auctions.client.controller.AuthController;
+import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 
@@ -10,14 +11,18 @@ public class AuthDialog {
 	private final AuthController authController;
 
 	public boolean registerWithGoogle(UserProfileDto userProfileDto) {
-		var res = authController.registerWithGoogle(userProfileDto);
-		System.out.println(res ? "Registered successfully with Google account." : "Error when registering new user.");
+		var res = authController.register(userProfileDto, AuthProviderType.GOOGLE);
+		System.out.println(res ?
+				"Registered successfully with Google account." :
+				"Error when registering new user with Google.");
 		return res;
 	}
 
 	public boolean registerWithFacebook(UserProfileDto userProfileDto) {
-		var res = authController.registerWithFacebook(userProfileDto);
-		System.out.println(res ? "Registered successfully with Facebook account." : "Error when registering new user.");
+		var res = authController.register(userProfileDto, AuthProviderType.FACEBOOK);
+		System.out.println(res ?
+				"Registered successfully with Facebook account." :
+				"Error when registering new user with Facebook.");
 		return res;
 	}
 

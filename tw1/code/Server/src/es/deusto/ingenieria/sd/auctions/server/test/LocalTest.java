@@ -1,6 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.server.test;
 
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
 import es.deusto.ingenieria.sd.auctions.server.remote.RemoteFacade;
 import es.deusto.ingenieria.sd.auctions.server.test.data.Mock;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
@@ -23,29 +24,30 @@ public class LocalTest {
             facade = new RemoteFacade();
 
             // Register and login
-            facade.facebookRegistration(mock.getUserProfileDto());
+            if (facade.register(mock.getUserProfileDto(), AuthProviderType.GOOGLE)) {
 
-            token = facade.login("test@gmail.com", "password");
+                token = facade.login("test@gmail.com", "password");
 
-            //Create and get training sessions
-            facade.createTrainingSession(token, mock.getTrainingSessionDto());
-            trainingSessionDtos = facade.getTrainingSessions(token);
-            trainingSessionDto = trainingSessionDtos.get(0);
-            System.out.println("\t- " + trainingSessionDto);
+                //Create and get training sessions
+                facade.createTrainingSession(token, mock.getTrainingSessionDto());
+                trainingSessionDtos = facade.getTrainingSessions(token);
+                trainingSessionDto = trainingSessionDtos.get(0);
+                System.out.println("\t- " + trainingSessionDto);
 
-            //Set up and get challenges
-            facade.setUpChallenge(token, mock.getChallengeDto());
-            challengeDtos = facade.downloadActiveChallenges(token);
-            challengeDto = challengeDtos.isEmpty() ? mock.getChallengeDto() : challengeDtos.get(0);
-            System.out.println("\t- " + challengeDto);
+                //Set up and get challenges
+                facade.setUpChallenge(token, mock.getChallengeDto());
+                challengeDtos = facade.downloadActiveChallenges(token);
+                challengeDto = challengeDtos.isEmpty() ? mock.getChallengeDto() : challengeDtos.get(0);
+                System.out.println("\t- " + challengeDto);
 
-            //Check challenges status
-            facade.acceptChallenge(token, challengeDto.getId());
-            var statuses = facade.checkChallengesStatus(token);
-            statuses.forEach(System.out::println);
+                //Check challenges status
+                facade.acceptChallenge(token, challengeDto.getId());
+                var statuses = facade.checkChallengesStatus(token);
+                statuses.forEach(System.out::println);
 
-            //Logout
-            facade.logout(token);
+                //Logout
+                facade.logout(token);
+            }
         } catch (Exception e) {
             System.out.println("\t# Error: " + e.getMessage());
         }

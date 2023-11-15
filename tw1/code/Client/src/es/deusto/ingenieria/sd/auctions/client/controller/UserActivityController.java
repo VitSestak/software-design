@@ -23,7 +23,7 @@ public class UserActivityController {
         try {
             serviceLocator.getService().createTrainingSession(token, sessionDto);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error when creating a training session: {}", e);
+            LOGGER.log(Level.SEVERE, "Error when creating a training session: " + e);
         }
     }
 
@@ -49,7 +49,7 @@ public class UserActivityController {
         try {
             serviceLocator.getService().setUpChallenge(token, challengeDto);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error when setting up challenge: {}", e);
+            LOGGER.log(Level.SEVERE, "Error when setting up challenge: " + e);
         }
     }
 
@@ -57,7 +57,7 @@ public class UserActivityController {
         try {
             return serviceLocator.getService().downloadActiveChallenges(token);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error when downloading active challenges: {}", e);
+            LOGGER.log(Level.SEVERE, "Error when downloading active challenges: " + e);
         }
         return List.of();
     }
@@ -66,7 +66,7 @@ public class UserActivityController {
         try {
             serviceLocator.getService().acceptChallenge(token, challengeId);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error when accepting a challenge: {}", e);
+            LOGGER.log(Level.SEVERE, "Error when accepting a challenge: " + e);
         }
     }
 
@@ -74,7 +74,7 @@ public class UserActivityController {
         try {
             return serviceLocator.getService().checkChallengesStatus(token);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, "Error when creating a training session: {}", e);
+            LOGGER.log(Level.SEVERE, "Error when creating a training session: " + e);
         }
         return List.of();
     }

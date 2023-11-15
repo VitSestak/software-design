@@ -1,6 +1,7 @@
 package es.deusto.ingenieria.sd.auctions.server.test.data;
 
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.common.SportType;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.auctions.server.user.dto.UserProfileDto;
@@ -34,13 +35,19 @@ public class Mock {
     }
 
     public ChallengeDto getChallengeDto() {
+        var uuid = UUID.randomUUID();
         return ChallengeDto.builder()
-                           .id(UUID.randomUUID())
+                           .id(uuid)
                            .name("Test challenge")
                            .startDate(new Date())
                            .endDate(new Date())
                            .target("10min")
                            .sportType(SportType.CYCLING)
+                           .challengeStatus(ChallengeStatusDto.builder()
+                                                              .challengeId(uuid)
+                                                              .progress(0.1f)
+                                                              .build()
+                           )
                            .build();
     }
 

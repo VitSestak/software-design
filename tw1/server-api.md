@@ -5,8 +5,7 @@
 _Note: Since this is RMI, all methods may throw RemoteException_
 
 ```java
-boolean googleRegistration(UserProfileDto user);
-boolean facebookRegistration(UserProfileDto user);
+boolean register(UserProfileDto user, AuthProviderType authProviderType);
 long login(String email, String password);
 void logout(long token);
 void createTrainingSession(long token, TrainingSessionDto trainingSession);
@@ -18,18 +17,7 @@ void acceptChallenge(long token, UUID challengeId);
 List<ChallengeStatusDto> checkChallengesStatus(long token);
 ```
 
-##### Additional logic:
 
-```java
-// get forecast from Klimat
-public WeatherDto getWeatherForecast(long token, Date date, String location);
-
-// from cycling computers
-public void saveActivityRecord(long token, ActivityRecordDTO activityRecord);
-
-// exchange data with other sports apps
-public TrainingDataDto exchangeTrainingSessionData(long token, String appId);
-```
 
 #### DTOs:
 
@@ -45,8 +33,6 @@ int weight;
 int height;
 int maxHearthRate;
 int restHeartRate;
-List<Challenge> challenges;
-List<TrainingSession> trainingSessions;
 ```
 
 
@@ -73,7 +59,7 @@ String target;
 Date startDate;
 Date endDate;
 SportType sportType;
-ChallengeStatus challengeStatus;
+ChallengeStatusDto challengeStatus;
 ```
 
 
@@ -86,24 +72,6 @@ UUID challengeId;
 ```
 
 
-
-**TrainingDataDto**
-
-- out of scope
-
-  
-
-**ActivityRecordDTO**
-
-- out of scope
-
-  
-
-**WeatherDto**
-
-- out of scope
-
-  
 
 #### Enums:
 
