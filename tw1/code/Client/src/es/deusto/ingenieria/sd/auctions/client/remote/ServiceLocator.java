@@ -9,6 +9,16 @@ public class ServiceLocator {
 	
 	//Remote Facade reference
 	private IRemoteFacade service;
+	private static ServiceLocator instance;
+
+	private ServiceLocator() {}
+
+	public static synchronized ServiceLocator getInstance() {
+		if (instance == null) {
+			instance = new ServiceLocator();
+		}
+		return instance;
+	}
 
 	public void setService(String ip, String port, String serviceName) {
 		//Activate Security Manager. It is needed for RMI.

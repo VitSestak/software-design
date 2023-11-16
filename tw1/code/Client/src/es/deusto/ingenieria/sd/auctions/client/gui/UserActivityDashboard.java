@@ -3,15 +3,75 @@ package es.deusto.ingenieria.sd.auctions.client.gui;
 import es.deusto.ingenieria.sd.auctions.client.controller.UserActivityController;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
-import lombok.RequiredArgsConstructor;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequiredArgsConstructor
 public class UserActivityDashboard {
 
     private final UserActivityController userActivityController;
+    private JFrame frame;
+
+    public UserActivityDashboard(UserActivityController userActivityController, JFrame frame, long token) {
+        this.userActivityController = userActivityController;
+        this.frame = frame;
+
+        // set up GUI window
+        final JButton showTrainingSessions = new JButton("Show my training sessions");
+        showTrainingSessions.addActionListener(e -> {
+            //TODO: graphical update
+            var trainingsSessions = displayTrainingSessions(token);
+        });
+        final JButton setUpTrainingSession = new JButton("Create new training session");
+        setUpTrainingSession.addActionListener(e -> {
+            // TODO
+            setUpChallenge(token, null);
+        });
+        final JLabel trainDetailsLabel = new JLabel("Enter training session ID: ");
+        final JTextField trainingDetails = new JTextField(20);
+        final JButton showTrainingDetails = new JButton("Show");
+        showTrainingDetails.addActionListener(e -> {
+            //TODO:
+            displayTrainingSessions(token);
+        });
+        final JButton setUpChallenge = new JButton("Set up new challenge");
+        setUpChallenge.addActionListener(e -> {
+            //TODO
+        });
+        final JButton acceptChallenge = new JButton("Accept challenge");
+        acceptChallenge.addActionListener(e -> {
+            //TODO
+        });
+        final JButton showChallengesStatus = new JButton("Show challenges details");
+        showChallengesStatus.addActionListener(e -> {
+            //TODO
+        });
+
+        final JPanel trainSessionPanel = new JPanel();
+        trainSessionPanel.add(trainDetailsLabel);
+        trainSessionPanel.add(trainingDetails);
+        trainSessionPanel.add(showTrainingDetails);
+
+        final JPanel panel = new JPanel();
+        panel.add(showTrainingSessions);
+        panel.add(setUpTrainingSession);
+        panel.add(trainSessionPanel);
+        panel.add(setUpChallenge);
+        panel.add(acceptChallenge);
+        panel.add(showChallengesStatus);
+
+        var contentPane = frame.getContentPane();
+        contentPane.removeAll();
+        contentPane.add(panel);
+        contentPane.revalidate();
+        contentPane.repaint();
+    }
+
+    // for testing
+    public UserActivityDashboard(UserActivityController userActivityController) {
+        this.userActivityController = userActivityController;
+    }
 
     public void createTrainingSession(long token, TrainingSessionDto trainingSessionDto) {
         System.out.println("Creating a new training session for user token: " + token);
@@ -25,7 +85,7 @@ public class UserActivityDashboard {
         );
     }
 
-    public void displayTrainingSessions(long token) {
+    public List<TrainingSessionDto> displayTrainingSessions(long token) {
         System.out.println("Fetching training sessions for token: " + token);
         var sessions = userActivityController.getTrainingSessions(token);
         if (!sessions.isEmpty()) {
@@ -38,6 +98,7 @@ public class UserActivityDashboard {
         } else {
             System.out.println("No training sessions found.");
         }
+        return sessions;
     }
 
     public void displayTrainingSessionDetails(long token, UUID sessionId) {
@@ -93,5 +154,10 @@ public class UserActivityDashboard {
         if (status.isEmpty()) {
             System.out.println("No accepted challenges found.");
         }
+    }
+
+    public void showWindow() {
+        frame.getContentPane().setVisible(true);
+
     }
 }
