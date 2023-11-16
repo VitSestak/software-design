@@ -2,13 +2,12 @@ package es.deusto.ingenieria.sd.auctions.server.challenge.service;
 
 import es.deusto.ingenieria.sd.auctions.server.challenge.model.Challenge;
 import es.deusto.ingenieria.sd.auctions.server.challenge.model.ChallengeStatus;
+import lombok.extern.java.Log;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+@Log
 public class ChallengeService {
-
-    private static final Logger LOGGER = Logger.getLogger(ChallengeService.class.getName());
 
     private static ChallengeService instance;
 
@@ -22,11 +21,11 @@ public class ChallengeService {
     }
 
     public void setUpNewChallenge(Challenge challenge) {
-        LOGGER.info("Setting up a new challenge: " + challenge);
+        log.info("Setting up a new challenge: " + challenge);
     }
 
     public List<Challenge> getActiveChallenges() {
-        LOGGER.info("Getting active challenges...");
+        log.info("Getting active challenges...");
         return List.of();
     }
 

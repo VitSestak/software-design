@@ -1,18 +1,16 @@
 package es.deusto.ingenieria.sd.auctions.server.training.service;
 
 import es.deusto.ingenieria.sd.auctions.server.training.model.TrainingSession;
+import lombok.extern.java.Log;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+@Log
 public class TrainingService {
-
-    private static final Logger LOGGER = Logger.getLogger(TrainingService.class.getName());
 
     private static TrainingService instance;
 
@@ -35,11 +33,11 @@ public class TrainingService {
         } else {
             userTrainingSessionsMap.put(token, List.of(trainingSession));
         }
-        LOGGER.log(Level.INFO, "Created a new training session: " + trainingSession);
+        log.info("Created a new training session: " + trainingSession);
     }
 
     public TrainingSession getTrainingSession(long token, UUID id) throws RemoteException {
-        LOGGER.log(Level.INFO, "Getting a training session for id: " + id);
+        log.info("Getting a training session for id: " + id);
         var trainingSession = userTrainingSessionsMap
                 .getOrDefault(token, List.of())
                 .stream()
@@ -52,7 +50,7 @@ public class TrainingService {
     }
 
     public List<TrainingSession> getTrainingSessions(long token) {
-        LOGGER.log(Level.INFO, "Getting all training sessions");
+        log.info("Getting all training sessions");
         return userTrainingSessionsMap.getOrDefault(token, List.of());
     }
 }

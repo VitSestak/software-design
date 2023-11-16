@@ -3,11 +3,14 @@ package es.deusto.ingenieria.sd.auctions.server.user.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Builder
 @Data
 public class UserProfileDto implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private String email;
@@ -15,7 +18,7 @@ public class UserProfileDto implements Serializable {
     private String birthDate;
     private int weight;
     private int height;
-    private int maxHearthRate;
+    private int maxHeartRate;
     private int restHeartRate;
 
 }

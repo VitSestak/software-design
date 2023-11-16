@@ -18,7 +18,7 @@ public class Mock {
                              .email("test@gmail.com")
                              .height(170)
                              .weight(100)
-                             .maxHearthRate(190)
+                             .maxHeartRate(190)
                              .restHeartRate(100)
                              .build();
     }

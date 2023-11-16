@@ -2,14 +2,12 @@ package es.deusto.ingenieria.sd.auctions.server.auth;
 
 import es.deusto.ingenieria.sd.auctions.server.common.AuthProviderType;
 import es.deusto.ingenieria.sd.auctions.server.user.model.UserProfile;
+import lombok.extern.java.Log;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+@Log
 public class AuthService {
-
-    private static final Logger LOGGER = Logger.getLogger(AuthService.class.getName());
 
     private static AuthService instance;
 
@@ -36,19 +34,19 @@ public class AuthService {
                 return facebookRegistration(user);
             }
         }
-        LOGGER.log(Level.INFO, "Registration failed for username: " + user.getEmail());
+        log.info("Registration failed for username: " + user.getEmail());
         return false;
     }
 
     private boolean googleRegistration(UserProfile user) {
-        LOGGER.log(Level.INFO, "Google registration successful for username: " + user.getEmail());
+        log.info("Google registration successful for username: " + user.getEmail());
         userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
         userProfiles.add(user);
         return true;
     }
 
     private boolean facebookRegistration(UserProfile user) {
-        LOGGER.log(Level.INFO, "Facebook registration successful for username: " + user.getEmail());
+        log.info("Facebook registration successful for username: " + user.getEmail());
         userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
         userProfiles.add(user);
         return true;

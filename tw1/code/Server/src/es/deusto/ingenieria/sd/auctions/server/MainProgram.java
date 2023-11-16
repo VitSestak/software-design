@@ -4,7 +4,9 @@ import java.rmi.Naming;
 
 import es.deusto.ingenieria.sd.auctions.server.remote.IRemoteFacade;
 import es.deusto.ingenieria.sd.auctions.server.remote.RemoteFacade;
+import lombok.extern.java.Log;
 
+@Log
 public class MainProgram {
 
 	public static void main(String[] args) {	
@@ -16,15 +18,15 @@ public class MainProgram {
 		//args[0] = RMIRegistry IP
 		//args[1] = RMIRegistry Port
 		//args[2] = Service Name
-		String name = "//" + args[0] + ":" + args[1] + "/" + args[2];		
+		String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
 		
 		//Bind remote facade instance to a service name using RMIRegistry
 		try {
 			IRemoteFacade remoteFacade = new RemoteFacade();			
 			Naming.rebind(name, remoteFacade);
-			System.out.println(" * Strava server '" + name + "' started!!");
+			log.info(" * Strava server '" + name + "' started!");
 		} catch (Exception ex) {
-			System.err.println(" # Strava Server Exception: " + ex.getMessage());
+			log.severe(" # Strava Server Exception: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 	}

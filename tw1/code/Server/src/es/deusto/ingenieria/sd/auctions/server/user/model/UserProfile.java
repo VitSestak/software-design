@@ -16,7 +16,7 @@ public class UserProfile {
     private String birthDate;
     private int weight;
     private int height;
-    private int maxHearthRate;
+    private int maxHeartRate;
     private int restHeartRate;
     private List<Challenge> challenges;
     private List<TrainingSession> trainingSessions;

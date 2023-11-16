@@ -22,7 +22,7 @@ public class UserProfileMapper {
                              .birthDate(userProfile.getBirthDate())
                              .weight(userProfile.getWeight())
                              .height(userProfile.getHeight())
-                             .maxHearthRate(userProfile.getMaxHearthRate())
+                             .maxHeartRate(userProfile.getMaxHeartRate())
                              .restHeartRate(userProfile.getRestHeartRate())
                              .build();
     }
@@ -34,7 +34,7 @@ public class UserProfileMapper {
                           .birthDate(userProfileDto.getBirthDate())
                           .weight(userProfileDto.getWeight())
                           .height(userProfileDto.getHeight())
-                          .maxHearthRate(userProfileDto.getMaxHearthRate())
+                          .maxHeartRate(userProfileDto.getMaxHeartRate())
                           .restHeartRate(userProfileDto.getRestHeartRate())
                           .build();
     }

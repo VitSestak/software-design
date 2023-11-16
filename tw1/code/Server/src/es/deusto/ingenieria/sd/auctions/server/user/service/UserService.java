@@ -1,13 +1,13 @@
 package es.deusto.ingenieria.sd.auctions.server.user.service;
 
 import es.deusto.ingenieria.sd.auctions.server.challenge.model.Challenge;
+import lombok.extern.java.Log;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+@Log
 public class UserService {
 
-    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
     private static UserService instance;
 
@@ -21,11 +21,11 @@ public class UserService {
     }
 
     public void acceptChallenge(String email, Challenge challenge) {
-        LOGGER.info("Accepting a challenge...");
+        log.info("Accepting a challenge...");
     }
 
     public List<Challenge> getAcceptedChallenges(String email) {
-        LOGGER.info("Getting accepted challenges...");
+        log.info("Getting accepted challenges...");
         return List.of();
     }
 }
