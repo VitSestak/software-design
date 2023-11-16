@@ -2,6 +2,7 @@ package es.deusto.ingenieria.sd.auctions.client.gui;
 
 import es.deusto.ingenieria.sd.auctions.client.controller.UserActivityController;
 import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.auctions.server.challenge.dto.ChallengeStatusDto;
 import es.deusto.ingenieria.sd.auctions.server.training.dto.TrainingSessionDto;
 
 import javax.swing.*;
@@ -11,11 +12,9 @@ import java.util.UUID;
 public class UserActivityDashboard {
 
     private final UserActivityController userActivityController;
-    private JFrame frame;
 
     public UserActivityDashboard(UserActivityController userActivityController, JFrame frame, long token) {
         this.userActivityController = userActivityController;
-        this.frame = frame;
 
         // set up GUI window
         final JButton showTrainingSessions = new JButton("Show my training sessions");
@@ -101,7 +100,7 @@ public class UserActivityDashboard {
         return sessions;
     }
 
-    public void displayTrainingSessionDetails(long token, UUID sessionId) {
+    public TrainingSessionDto displayTrainingSessionDetails(long token, UUID sessionId) {
         System.out.println("Fetching training session details for session: " + sessionId + " and token " + token);
         var session = userActivityController.getTrainingSession(token, sessionId);
         if (session != null) {
@@ -114,6 +113,7 @@ public class UserActivityDashboard {
         } else {
             System.out.println("Training session not found.");
         }
+        return session;
     }
 
     public List<ChallengeDto> displayActiveChallenges(long token) {
@@ -144,7 +144,7 @@ public class UserActivityDashboard {
         System.out.println("Successfully accepted the challenge!");
     }
 
-    public void displayAcceptedChallengesStatus(long token) {
+    public List<ChallengeStatusDto> displayAcceptedChallengesStatus(long token) {
         System.out.println("Getting challenges status for token " + token);
         var status = userActivityController.checkAcceptedChallengesStatus(token);
         status.forEach(s -> {
@@ -154,10 +154,6 @@ public class UserActivityDashboard {
         if (status.isEmpty()) {
             System.out.println("No accepted challenges found.");
         }
-    }
-
-    public void showWindow() {
-        frame.getContentPane().setVisible(true);
-
+        return status;
     }
 }
