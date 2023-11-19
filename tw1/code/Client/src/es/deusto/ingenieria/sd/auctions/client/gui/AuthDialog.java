@@ -94,7 +94,7 @@ public class AuthDialog extends JFrame {
 														  .height(Integer.parseInt(height.getText()))
 														  .weight(Integer.parseInt(weight.getText()))
 														  .restHeartRate(Integer.parseInt(restHeartRate.getText()))
-														  .maxHearthRate(Integer.parseInt(maxHeartRate.getText()))
+														  .maxHeartRate(Integer.parseInt(maxHeartRate.getText()))
 														  .build()
 			);
 			if (result) {
@@ -118,7 +118,7 @@ public class AuthDialog extends JFrame {
 															.height(Integer.parseInt(height.getText()))
 															.weight(Integer.parseInt(weight.getText()))
 															.restHeartRate(Integer.parseInt(restHeartRate.getText()))
-															.maxHearthRate(Integer.parseInt(maxHeartRate.getText()))
+															.maxHeartRate(Integer.parseInt(maxHeartRate.getText()))
 															.build()
 			);
 			if (result) {
@@ -183,8 +183,7 @@ public class AuthDialog extends JFrame {
 		googleLogin.addActionListener(e -> {
 			boolean result = handleLogin(email.getText(), new String(password.getPassword()), loginResult);
 			if (result) {
-				UserActivityDashboard us = new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), this, authController.getToken());
-				us.showWindow();
+				new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), this, authController.getToken());
 			}
 		});
 

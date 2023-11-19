@@ -34,7 +34,7 @@ public class Test {
                                            .height(180)
                                            .weight(80)
                                            .restHeartRate(80)
-                                           .maxHearthRate(150)
+                                           .maxHeartRate(150)
                                            .birthDate("14.11.2000")
                                            .build();
 
