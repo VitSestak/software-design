@@ -1,6 +1,5 @@
 package es.deusto.ingenieria.sd.strava.gateway;
 
-import es.deusto.ingenieria.sd.strava.auth.AuthService;
 import es.deusto.ingenieria.sd.strava.auth.api.RegistrationRequest;
 import es.deusto.ingenieria.sd.strava.auth.api.LoginRequest;
 import lombok.extern.java.Log;
@@ -21,7 +20,6 @@ public class FacebookGateway implements AuthProviderService {
 
     @Override
     public boolean register(String email) {
-        AuthService.getInstance().isRegistered("");
         try (Socket socket = new Socket(ip, port);
              DataInputStream in = new DataInputStream(socket.getInputStream());
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
