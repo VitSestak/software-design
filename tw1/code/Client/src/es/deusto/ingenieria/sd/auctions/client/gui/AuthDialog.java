@@ -67,7 +67,7 @@ public class AuthDialog extends JFrame {
 		panel.add(heightP);
 
 		var weightP = new JPanel();
-		weightP.add(new JLabel("Your weight (cm): "));
+		weightP.add(new JLabel("Your weight (kg): "));
 		weightP.add(weight);
 		panel.add(weightP);
 
@@ -178,27 +178,18 @@ public class AuthDialog extends JFrame {
 		final JLabel loginResult = new JLabel("");
 		loginResult.setHorizontalAlignment(SwingConstants.CENTER);
 
-		final JButton googleLogin = new JButton("Login with Google");
-		googleLogin.setBackground(Color.LIGHT_GRAY);
-		googleLogin.addActionListener(e -> {
+		final JButton login = new JButton("Login with Google");
+		login.setBackground(Color.LIGHT_GRAY);
+		login.addActionListener(e -> {
 			boolean result = handleLogin(email.getText(), new String(password.getPassword()), loginResult);
 			if (result) {
 				new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), this, authController.getToken());
 			}
 		});
 
-		final JButton facebookLogin = new JButton("Login with Facebook");
-		facebookLogin.setBackground(Color.BLUE);
-		facebookLogin.setForeground(Color.WHITE);
-		facebookLogin.addActionListener(e -> {
-			boolean result = handleLogin(email.getText(), new String(password.getPassword()), loginResult);
-			if (result) {
-				new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), this, authController.getToken());
-			}
-		});
 
-		buttonsPanel.add(googleLogin);
-		buttonsPanel.add(facebookLogin);
+
+		buttonsPanel.add(login);
 		panel.add(buttonsPanel);
 		panel.add(loginResult);
 
