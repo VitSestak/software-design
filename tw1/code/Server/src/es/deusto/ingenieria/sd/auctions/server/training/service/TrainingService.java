@@ -4,10 +4,7 @@ import es.deusto.ingenieria.sd.auctions.server.training.model.TrainingSession;
 import lombok.extern.java.Log;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Log
 public class TrainingService {
@@ -31,7 +28,7 @@ public class TrainingService {
         if (userTrainingSessionsMap.containsKey(token)) {
             userTrainingSessionsMap.get(token).add(trainingSession);
         } else {
-            userTrainingSessionsMap.put(token, List.of(trainingSession));
+            userTrainingSessionsMap.put(token, new ArrayList<>(Arrays.asList(trainingSession)));
         }
         log.info("Created a new training session: " + trainingSession);
     }

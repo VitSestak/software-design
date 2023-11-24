@@ -115,20 +115,20 @@ public class UserActivityDashboard {
 
         });
 
-        JLabel trainTitle = new JLabel("SHOW A CHALLENGE");
+        JLabel trainTitle = new JLabel("SHOW A TRAINING SESSION DETAILS \n");
         JLabel trainSessionIdLabel = new JLabel("Enter training session ID:");
         JTextField trainingSessionId = new JTextField(20);
         JButton showTrainingDetails = new JButton("Show");
         showTrainingDetails.addActionListener(e -> {
-            var trainingSession = userActivityController.getTrainingSession(token, UUID.fromString(trainingSessionId.getText()));
-
+            var ts = userActivityController.getTrainingSession(token, UUID.fromString(trainingSessionId.getText()));
+            showDiagWindShowSess(ts);
         });
 
         JButton setUpChallenge = new JButton("Set up new challenge");
         setUpChallenge.addActionListener(e -> abrirVentanaDialogoChallenge());
 
 
-        JLabel challengeTitle = new JLabel("ACCEPT A CHALLENGE");
+        JLabel challengeTitle = new JLabel("ACCEPT A CHALLENGE\n");
         JLabel challengeDetailLabel = new JLabel("Enter challenge ID:");
         JTextField challengeId = new JTextField(20);
         JButton showChallengeDetails = new JButton("Accept");
@@ -207,11 +207,6 @@ public class UserActivityDashboard {
 
             // Obtener la fecha actual
             Date fechaActual = new Date();
-
-            // Formatear la fecha como "dd-MM-yyyy"
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            String fechaActualFormateada = formatter.format(fechaActual);
-
 
             // Formatear la hora
             DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -301,6 +296,7 @@ public class UserActivityDashboard {
         try {
             return dateFormat.parse(dateString);
         } catch (ParseException e) {
+            System.out.println("ERROR WHEN PARSIONG DATEËEEEEE " + dateString );
             e.printStackTrace();
             return null;
         }
@@ -398,12 +394,35 @@ public class UserActivityDashboard {
         JFrame frame = new JFrame("Training Sessions");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        DefaultListModel<TrainingSessionDto> listModel = new DefaultListModel<>();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
         for (TrainingSessionDto trainingSession : listTrainingSessions) {
-            listModel.addElement(trainingSession);
+
+            var id = trainingSession.getId();
+            var title = trainingSession.getTitle();
+            var startDate = trainingSession.getStartDate().toString();
+            var startTime = trainingSession.getStartTime().toString();
+            var spType = trainingSession.getSportType().toString();
+            var dist = trainingSession.getDistance();
+
+            var idStr = "Training Session ID: " + id;
+            var titleStr = "Title: " + title;
+            var startDateStr = "Sart Date: " + startDate;
+            var startTimeStr = "Start Time: " + startTime;
+            var spTypeStr = "Type of Sport: " + spType;
+            var distStr = "Distance: " + dist;
+
+            listModel.addElement(idStr);
+            listModel.addElement(titleStr);
+            listModel.addElement(startDateStr);
+            listModel.addElement(startTimeStr);
+            listModel.addElement(spTypeStr);
+            listModel.addElement(distStr);
+            listModel.addElement("------------------------------------");
+
+
         }
 
-        JList<TrainingSessionDto> list = new JList<>(listModel);
+        JList<String> list = new JList<>(listModel);
         System.out.println(listModel);
         JScrollPane scrollPane = new JScrollPane(list);
 
@@ -419,12 +438,63 @@ public class UserActivityDashboard {
         JFrame frame = new JFrame("Challenges");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        DefaultListModel<ChallengeDto> listModel = new DefaultListModel<>();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        System.out.println("challenges received " + listChallenges);
         for (ChallengeDto challenge : listChallenges) {
-            listModel.addElement(challenge);
+            var nombre = challenge.getName();
+            var target = challenge.getTarget();
+            var stDate = challenge.getStartDate().toString();
+            var endDate = challenge.getEndDate().toString();
+            var spType = challenge.getSportType().toString();
+            var chStat = challenge.getChallengeStatus().getProgress();
+
+
+
+            var strToAdd = new String("Nombre: " + nombre + "Target: " + target + "Start date: " + stDate + "End date: " + endDate + "Sport Type: " + spType + "Challenge Status: " + chStat);
+            listModel.addElement(strToAdd);
         }
 
-        JList<ChallengeDto> list = new JList<>(listModel);
+        JList<String> list = new JList<>(listModel);
+        System.out.println(listModel);
+        JScrollPane scrollPane = new JScrollPane(list);
+
+        frame.add(scrollPane);
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private void showDiagWindShowSess(TrainingSessionDto trainingSession){
+        //var listTrainingSessions = userActivityController.getTrainingSessions(token);
+
+        JFrame frame = new JFrame("Training session");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        var id = trainingSession.getId();
+        var title = trainingSession.getTitle();
+        var startDate = trainingSession.getStartDate().toString();
+        var startTime = trainingSession.getStartTime().toString();
+        var spType = trainingSession.getSportType().toString();
+        var dist = trainingSession.getDistance();
+
+        var idStr = "Training Session ID: " + id;
+        var titleStr = "Title: " + title;
+        var startDateStr = "Sart Date: " + startDate;
+        var startTimeStr = "Start Time: " + startTime;
+        var spTypeStr = "Type of Sport: " + spType;
+        var distStr = "Distance: " + dist;
+
+        listModel.addElement(idStr);
+        listModel.addElement(titleStr);
+        listModel.addElement(startDateStr);
+        listModel.addElement(startTimeStr);
+        listModel.addElement(spTypeStr);
+        listModel.addElement(distStr);
+
+
+        JList<String> list = new JList<>(listModel);
         System.out.println(listModel);
         JScrollPane scrollPane = new JScrollPane(list);
 
