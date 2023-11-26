@@ -35,41 +35,44 @@ public class AuthService {
 
     public boolean registerUser(UserProfile user, AuthProviderType authProviderType) {
         if (authProviderType.equals(AuthProviderType.GOOGLE)) {
-            log.info("Registering user with Google");
-            return googleRegistration(user);
+            log.info("Verifying user with Google");
+            if (isRegisteredWithGoogle(user)) {
+                userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
+                userProfiles.add(user);
+            }
         } else if (authProviderType.equals(AuthProviderType.FACEBOOK)) {
-            log.info("Registering user with Facebook");
-            return facebookRegistration(user);
+            log.info("Verifying user with Facebook");
+            if (isRegisteredWithFacebook(user)) {
+                userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
+                userProfiles.add(user);
+            }
         }
         log.info("Registration failed for username: " + user.getEmail());
         return false;
     }
 
-    private boolean googleRegistration(UserProfile user) {
-        var res = googleGateway.register(user.getEmail());
+    private boolean isRegisteredWithGoogle(UserProfile user) {
+        var res = googleGateway.isUserRegistered(user.getEmail());
         if (res) {
-            log.info("Google registration successful for username: " + user.getEmail());
-            userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
-            userProfiles.add(user);
+            log.info("Google registration verification successful for username: " + user.getEmail());
             return true;
         }
         return false;
     }
 
-    private boolean facebookRegistration(UserProfile user) {
-        var res = facebookGateway.register(user.getEmail());
+    // TODO: make some void method return boolean
+    private boolean isRegisteredWithFacebook(UserProfile user) {
+        var res = facebookGateway.isUserRegistered(user.getEmail());
         if (res) {
-            log.info("Facebook registration successful for username: " + user.getEmail());
-            userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
-            userProfiles.add(user);
+            log.info("Facebook registration verification successful for username: " + user.getEmail());
             return true;
         }
         return false;
     }
 
     public boolean loginUser(String email, String password) {
-        if (isRegistered(email)) {
-            var authProvider = userAuthProviderMap.get(email);
+        var authProvider = userAuthProviderMap.get(email);
+        if (authProvider != null) {
             if (authProvider.equals(AuthProviderType.GOOGLE)) {
                 log.info("Logging to Google with email: " + email + " and password: " + password);
                 return googleGateway.login(email, password);
@@ -78,11 +81,8 @@ public class AuthService {
                 return facebookGateway.login(email, password);
             }
         }
+        log.info("User is not registered");
         return false;
-    }
-
-    public boolean isRegistered(String email) {
-        return userAuthProviderMap.containsKey(email);
     }
 
     public UserProfile getLoggedUserProfile(String email) {

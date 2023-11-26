@@ -1,6 +1,6 @@
 package es.deusto.ingenieria.sd.strava.gateway;
 
-import es.deusto.ingenieria.sd.strava.auth.api.RegistrationRequest;
+import es.deusto.ingenieria.sd.strava.auth.api.VerificationRequest;
 import es.deusto.ingenieria.sd.strava.auth.api.LoginRequest;
 import lombok.extern.java.Log;
 
@@ -19,19 +19,19 @@ public class FacebookGateway implements AuthProviderService {
     }
 
     @Override
-    public boolean register(String email) {
+    public boolean isUserRegistered(String email) {
         try (Socket socket = new Socket(ip, port);
              DataInputStream in = new DataInputStream(socket.getInputStream());
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
         {
             log.info("Verifying registration for email:" + email);
-            var regRequest = RegistrationRequest.builder()
+            var regRequest = VerificationRequest.builder()
                                                 .email(email)
                                                 .build();
             out.writeObject(regRequest);
             return in.readBoolean();
         } catch (IOException e) {
-            log.severe("Facebook registration failed: " + e.getMessage());
+            log.severe("Facebook registration verification failed: " + e.getMessage());
         }
         return false;
     }
@@ -50,7 +50,7 @@ public class FacebookGateway implements AuthProviderService {
             out.writeObject(loginRequest);
             return in.readBoolean();
         } catch (IOException e) {
-            log.severe("Facebook registration failed: " + e.getMessage());
+            log.severe("Facebook login failed: " + e.getMessage());
         }
         return false;
     }

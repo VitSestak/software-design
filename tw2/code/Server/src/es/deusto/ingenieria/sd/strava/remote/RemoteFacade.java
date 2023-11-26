@@ -43,20 +43,15 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 
 	@Override
 	public synchronized long login(String email, String password) throws RemoteException {
-		long token = -1;
-		if (AuthService.getInstance().isRegistered(email)) {
-			log.info("Logging user: " + email);
-			var res = AuthService.getInstance().loginUser(email, password);
-			if (res) {
-				log.info("Login successful for user: " + email);
-				token = new Date().getTime();
-				loggedUsersMap.put(token, email);
-			}
+		log.info("Logging user: " + email);
+		var res = AuthService.getInstance().loginUser(email, password);
+		if (res) {
+			log.info("Login successful for user: " + email);
+			long token = new Date().getTime();
+			loggedUsersMap.put(token, email);
 			return token;
-		} else {
-			log.severe("User " + email + " is not registered!");
-			throw new RemoteException("Login failed! User is not registered.");
 		}
+		throw new RemoteException("Login failed!.");
 	}
 
 	@Override
