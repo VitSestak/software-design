@@ -1,7 +1,7 @@
 package es.deusto.ingenieria.sd.strava.controller;
 
 import es.deusto.ingenieria.sd.strava.entity.GoogleUser;
-import es.deusto.ingenieria.sd.strava.api.RegistrationRequest;
+import es.deusto.ingenieria.sd.strava.api.VerificationRequest;
 import es.deusto.ingenieria.sd.strava.api.LoginRequest;
 import es.deusto.ingenieria.sd.strava.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class AuthController {
+public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean register(@RequestBody RegistrationRequest request) {
+    @PostMapping(value = "/verify", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public boolean verify(@RequestBody VerificationRequest request) {
         log.info("Verifying that the user: {} is registered", request.getEmail());
         return userService.getUser(request.getEmail()) != null;
     }
@@ -44,8 +44,8 @@ public class AuthController {
         userService.createOrUpdateUser(user);
     }
 
-    @DeleteMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteUser(@RequestBody String email) {
+    @DeleteMapping(value = "/users/{email}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteUser(@PathVariable String email) {
         log.info("Deleting user: {}", email);
         userService.deleteUser(email);
     }

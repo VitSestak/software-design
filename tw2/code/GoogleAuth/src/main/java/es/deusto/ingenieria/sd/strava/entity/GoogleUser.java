@@ -1,7 +1,8 @@
-package es.deusto.ingenieria.sd.strava;
+package es.deusto.ingenieria.sd.strava.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
