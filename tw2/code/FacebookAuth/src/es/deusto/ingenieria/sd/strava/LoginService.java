@@ -1,7 +1,7 @@
 package es.deusto.ingenieria.sd.strava;
 
 import es.deusto.ingenieria.sd.strava.auth.api.LoginRequest;
-import es.deusto.ingenieria.sd.strava.auth.api.RegistrationRequest;
+import es.deusto.ingenieria.sd.strava.auth.api.VerificationRequest;
 import lombok.extern.java.Log;
 
 import java.io.*;
@@ -34,8 +34,8 @@ public class LoginService extends Thread {
 		try {
 			log.info("Received data from: " + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort());
 			var receivedMessage = in.readObject();
-			if (receivedMessage instanceof RegistrationRequest registrationRequest) {
-				boolean result = isUserRegistered(registrationRequest.getEmail());
+			if (receivedMessage instanceof VerificationRequest verificationRequest) {
+				boolean result = isUserRegistered(verificationRequest.getEmail());
 				out.writeBoolean(result);
 			} else if (receivedMessage instanceof LoginRequest loginRequest) {
 				boolean result = login(loginRequest.getEmail(), loginRequest.getPassword());

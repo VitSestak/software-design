@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Builder
 @Data
-public class RegistrationRequest implements Serializable {
+public class VerificationRequest implements Serializable {
 
     private String email;
 
