@@ -31,7 +31,7 @@ public class GoogleGateway implements AuthProviderService {
                                             .email(email)
                                             .build();
         var request = HttpRequest.newBuilder()
-                                 .uri(URI.create("http://" + serverAddress + "/register"))
+                                 .uri(URI.create("http://" + serverAddress + "/verify"))
                                  .header("Content-Type", "application/json")
                                  .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(regRequest)))
                                  .build();

@@ -51,7 +51,8 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 			loggedUsersMap.put(token, email);
 			return token;
 		}
-		throw new RemoteException("Login failed!.");
+		log.info("Login failed!");
+		throw new RemoteException("Login failed!");
 	}
 
 	@Override

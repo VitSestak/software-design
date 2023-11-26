@@ -67,7 +67,7 @@ public class AuthDialog extends JFrame {
 		panel.add(heightP);
 
 		var weightP = new JPanel();
-		weightP.add(new JLabel("Your weight (cm): "));
+		weightP.add(new JLabel("Your weight (kg): "));
 		weightP.add(weight);
 		panel.add(weightP);
 

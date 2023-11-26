@@ -39,12 +39,14 @@ public class AuthService {
             if (isRegisteredWithGoogle(user)) {
                 userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
                 userProfiles.add(user);
+                return true;
             }
         } else if (authProviderType.equals(AuthProviderType.FACEBOOK)) {
             log.info("Verifying user with Facebook");
             if (isRegisteredWithFacebook(user)) {
                 userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
                 userProfiles.add(user);
+                return true;
             }
         }
         log.info("Registration failed for username: " + user.getEmail());
