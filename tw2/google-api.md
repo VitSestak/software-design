@@ -6,12 +6,18 @@
 GET /verify 
 request body: VerificationRequest
 consumes: "application/json"
-returns: boolean    
-
+returns: boolean
+status code: 
+	- 200 OK
+    - 400 Bad request    
+        
 POST /login
 request body: LoginRequest 
 consumes: "application/json"
 returns: boolean    
+status code: 
+	- 200 OK
+    - 400 Bad request
 ```
 
 
