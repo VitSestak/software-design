@@ -1,7 +1,6 @@
 package es.deusto.ingenieria.sd.strava.controller;
 
 import es.deusto.ingenieria.sd.strava.entity.GoogleUser;
-import es.deusto.ingenieria.sd.strava.api.VerificationRequest;
 import es.deusto.ingenieria.sd.strava.api.LoginRequest;
 import es.deusto.ingenieria.sd.strava.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +15,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(value = "/verify", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean verify(@RequestBody VerificationRequest request) {
-        log.info("Verifying that the user: {} is registered", request.getEmail());
-        return userService.getUser(request.getEmail()) != null;
+    @GetMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean verify(@RequestParam String email) {
+        log.info("Verifying that the user: {} is registered", email);
+        return userService.isRegistered(email);
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean login(@RequestBody LoginRequest request) {
         log.info("Login request for email: {}", request.getEmail());
-        var user = userService.getUser(request.getEmail());
-        if (user != null) {
-            return user.getPassword().equals(request.getPassword());
-        }
-        return false;
+        return userService.login(request.getEmail(), request.getPassword());
     }
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)

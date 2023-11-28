@@ -6,7 +6,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -34,8 +33,16 @@ public class UserService {
         });
     }
 
-    public List<GoogleUser> getAllUsers() {
-        return userRepository.findAll();
+    public boolean login(String email, String password) {
+        var user = getUser(email);
+        if (user != null) {
+            return user.getPassword().equals(password);
+        }
+        return false;
+    }
+
+    public boolean isRegistered(String email) {
+        return userRepository.findGoogleUserByEmail(email).isPresent();
     }
 
     public GoogleUser getUser(String email) {

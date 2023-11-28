@@ -1,7 +1,6 @@
 package es.deusto.ingenieria.sd.strava.auth;
 
 import es.deusto.ingenieria.sd.strava.common.AuthProviderType;
-import es.deusto.ingenieria.sd.strava.gateway.AuthProviderService;
 import es.deusto.ingenieria.sd.strava.gateway.GatewayFactory;
 import es.deusto.ingenieria.sd.strava.user.model.UserProfile;
 import lombok.extern.java.Log;
@@ -16,14 +15,9 @@ public class AuthService {
     private final Map<String, AuthProviderType> userAuthProviderMap;
     private final List<UserProfile> userProfiles;
 
-    private final AuthProviderService googleGateway;
-    private final AuthProviderService facebookGateway;
-
     private AuthService() {
         userAuthProviderMap = new HashMap<>();
         userProfiles = new ArrayList<>();
-        googleGateway = GatewayFactory.getInstance().createGateway(AuthProviderType.GOOGLE);
-        facebookGateway = GatewayFactory.getInstance().createGateway(AuthProviderType.FACEBOOK);
     }
 
     public static synchronized AuthService getInstance() {
@@ -34,54 +28,21 @@ public class AuthService {
     }
 
     public boolean registerUser(UserProfile user, AuthProviderType authProviderType) {
-        if (authProviderType.equals(AuthProviderType.GOOGLE)) {
-            log.info("Verifying user with Google");
-            if (isRegisteredWithGoogle(user)) {
-                userAuthProviderMap.put(user.getEmail(), AuthProviderType.GOOGLE);
-                userProfiles.add(user);
-                return true;
-            }
-        } else if (authProviderType.equals(AuthProviderType.FACEBOOK)) {
-            log.info("Verifying user with Facebook");
-            if (isRegisteredWithFacebook(user)) {
-                userAuthProviderMap.put(user.getEmail(), AuthProviderType.FACEBOOK);
-                userProfiles.add(user);
-                return true;
-            }
-        }
-        log.info("Registration failed for username: " + user.getEmail());
-        return false;
-    }
-
-    private boolean isRegisteredWithGoogle(UserProfile user) {
-        var res = googleGateway.isUserRegistered(user.getEmail());
-        if (res) {
-            log.info("Google registration verification successful for username: " + user.getEmail());
+        var verified = GatewayFactory.getInstance().createGateway(authProviderType).isUserRegistered(user.getEmail());
+        if (verified) {
+            log.info("Registration successfully verified by " + authProviderType + " for email: " + user.getEmail());
+            userAuthProviderMap.put(user.getEmail(), authProviderType);
+            userProfiles.add(user);
             return true;
         }
-        return false;
-    }
-
-    // TODO: make some void method return boolean
-    private boolean isRegisteredWithFacebook(UserProfile user) {
-        var res = facebookGateway.isUserRegistered(user.getEmail());
-        if (res) {
-            log.info("Facebook registration verification successful for username: " + user.getEmail());
-            return true;
-        }
+        log.info("Registration verification failed for username: " + user.getEmail());
         return false;
     }
 
     public boolean loginUser(String email, String password) {
         var authProvider = userAuthProviderMap.get(email);
         if (authProvider != null) {
-            if (authProvider.equals(AuthProviderType.GOOGLE)) {
-                log.info("Logging to Google with email: " + email + " and password: " + password);
-                return googleGateway.login(email, password);
-            } else {
-                log.info("Logging to Facebook with email: " + email + " and password: " + password);
-                return facebookGateway.login(email, password);
-            }
+            return GatewayFactory.getInstance().createGateway(authProvider).login(email, password);
         }
         log.info("User is not registered");
         return false;

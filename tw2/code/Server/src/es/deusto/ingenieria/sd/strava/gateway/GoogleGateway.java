@@ -3,7 +3,6 @@ package es.deusto.ingenieria.sd.strava.gateway;
 import com.google.gson.Gson;
 
 import es.deusto.ingenieria.sd.strava.auth.api.LoginRequest;
-import es.deusto.ingenieria.sd.strava.auth.api.VerificationRequest;
 import lombok.extern.java.Log;
 
 import java.net.URI;
@@ -27,13 +26,10 @@ public class GoogleGateway implements AuthProviderService {
     @Override
     public boolean isUserRegistered(String email) {
         log.info("Verifying registration via Google with email: " + email);
-        var regRequest = VerificationRequest.builder()
-                                            .email(email)
-                                            .build();
         var request = HttpRequest.newBuilder()
-                                 .uri(URI.create("http://" + serverAddress + "/verify"))
+                                 .uri(URI.create("http://" + serverAddress + "/verify?email=" + email))
                                  .header("Content-Type", "application/json")
-                                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(regRequest)))
+                                 .GET()
                                  .build();
         try {
             return sendRequest(request, Boolean.class);
