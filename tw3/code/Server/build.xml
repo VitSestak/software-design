@@ -14,8 +14,8 @@
 	<property name="googleServer.port" value="8080"/>
 	<property name="facebookServer.IP" value="127.0.0.1"/>
 	<property name="facebookServer.port" value="35600"/>
-	<property name="mail.username" value="stravadeusto@gmail.com"/>
-	<property name="mail.password" value="swdesign"/>
+	<property name="mail.username" value="deusto.sd@gmail.com"/>
+	<property name="mail.password" value="oralkudjrkgjmuxn"/>
 
 	<path id="classpath">
         <fileset dir="${lib.dir}">
