@@ -1,6 +1,6 @@
 package es.deusto.ingenieria.sd.strava.challenge.dto;
 
-import es.deusto.ingenieria.sd.strava.common.SportType;
+import es.deusto.ingenieria.sd.strava.common.enums.SportType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,6 +22,5 @@ public class ChallengeDto implements Serializable {
     private Date startDate;
     private Date endDate;
     private SportType sportType;
-    private ChallengeStatusDto challengeStatus;
 
 }

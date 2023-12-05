@@ -1,7 +1,7 @@
 package es.deusto.ingenieria.sd.strava.test;
 
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeDto;
-import es.deusto.ingenieria.sd.strava.common.AuthProviderType;
+import es.deusto.ingenieria.sd.strava.common.enums.AuthProviderType;
 import es.deusto.ingenieria.sd.strava.gateway.GatewayFactory;
 import es.deusto.ingenieria.sd.strava.remote.RemoteFacade;
 import es.deusto.ingenieria.sd.strava.test.data.Mock;
@@ -47,7 +47,7 @@ public class LocalTest {
 
                 //Check challenges status
                 facade.acceptChallenge(token, challengeDto.getId());
-                var statuses = facade.checkChallengesStatus(token);
+                var statuses = facade.getChallengesStatus(token);
                 statuses.forEach(System.out::println);
 
                 //Logout

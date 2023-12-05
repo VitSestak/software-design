@@ -1,9 +1,10 @@
 package es.deusto.ingenieria.sd.strava.challenge.service;
 
+import es.deusto.ingenieria.sd.strava.challenge.dao.ChallengeDao;
 import es.deusto.ingenieria.sd.strava.challenge.model.Challenge;
-import es.deusto.ingenieria.sd.strava.challenge.model.ChallengeStatus;
 import lombok.extern.java.Log;
 
+import java.util.Date;
 import java.util.List;
 
 @Log
@@ -22,14 +23,11 @@ public class ChallengeService {
 
     public void setUpNewChallenge(Challenge challenge) {
         log.info("Setting up a new challenge: " + challenge);
+        ChallengeDao.getInstance().persist(challenge);
     }
 
     public List<Challenge> getActiveChallenges() {
         log.info("Getting active challenges...");
-        return List.of();
-    }
-
-    public List<ChallengeStatus> getChallengesStatus(List<Challenge> challenges) {
-        return List.of();
+        return ChallengeDao.getInstance().findAllActive(new Date());
     }
 }

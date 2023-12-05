@@ -27,7 +27,7 @@ public class GoogleGateway implements AuthProviderService {
     public boolean isUserRegistered(String email) {
         log.info("Verifying registration via Google with email: " + email);
         var request = HttpRequest.newBuilder()
-                                 .uri(URI.create("http://" + serverAddress + "/verify?email=" + email))
+                                 .uri(URI.create("http://" + serverAddress + "/verify/" + email))
                                  .header("Content-Type", "application/json")
                                  .GET()
                                  .build();

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeDto;
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeStatusDto;
-import es.deusto.ingenieria.sd.strava.common.AuthProviderType;
+import es.deusto.ingenieria.sd.strava.common.enums.AuthProviderType;
 import es.deusto.ingenieria.sd.strava.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.strava.user.dto.UserProfileDto;
 
@@ -23,6 +23,6 @@ public interface IRemoteFacade extends Remote {
 	void setUpChallenge(long token, ChallengeDto challenge) throws RemoteException;
 	List<ChallengeDto> downloadActiveChallenges(long token) throws RemoteException;
 	void acceptChallenge(long token, UUID challengeId) throws RemoteException;
-	List<ChallengeStatusDto> checkChallengesStatus(long token) throws RemoteException;
+	List<ChallengeStatusDto> getChallengesStatus(long token) throws RemoteException;
 
 }

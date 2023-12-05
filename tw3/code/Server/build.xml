@@ -1,54 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="4.server" name="Server">
+<project basedir="." default="7.server" name="Server">
 	<property name="src.dir" location="src"/>
    	<property name="bin.dir" location="bin"/>
 	<property name="dist.dir" location="dist"/>
 	<property name="lib.dir" location="lib"/>
-	<property name="export.file" value="StravaServer.jar"/>
+	<property name="resources.dir" location="resources"/>
+	<property name="export.file" value="stravaServer.jar"/>
 	<property name="policy.file" location="security/java.policy"/>	
 	<property name="rmiRegistry.IP" value="127.0.0.1"/>
 	<property name="rmiRegistry.port" value="1099"/>
-	<property name="server.name" value="StravaServer"/>
+	<property name="server.name" value="stravaServer"/>
 	<property name="googleServer.IP" value="127.0.0.1"/>
 	<property name="googleServer.port" value="8080"/>
 	<property name="facebookServer.IP" value="127.0.0.1"/>
 	<property name="facebookServer.port" value="35600"/>
+	<property name="mail.username" value="stravadeusto@gmail.com"/>
+	<property name="mail.password" value="swdesign"/>
 
 	<path id="classpath">
         <fileset dir="${lib.dir}">
             <include name="**/*.jar"/>
         </fileset>
         <pathelement location="${bin.dir}"/>
-    </path>
-	
+		<pathelement location="${resources.dir}"/>
+	</path>
+
 	<target name="1.build" description="Builds the project">
 		<delete dir="${bin.dir}"/>
 		<mkdir dir="${bin.dir}"/>
 		<javac srcdir="${src.dir}" destdir="${bin.dir}" classpathref="classpath" deprecation="true" fork="true" includeantruntime="no"/>
     </target>
-	
-	<target name="2.export" depends="1.build" description="Export classes into a .jar file">
+
+	<target name="2.enhance-classes" depends="1.build" description="Adds JDO code to the persistent compiled classes">
+		<taskdef name="enhancer" classpathref="classpath" classname="org.datanucleus.enhancer.EnhancerTask"/>
+		<enhancer classpathref="classpath" persistenceUnit="stravaServer" api="JPA" failonerror="true">
+			<sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+			<fileset dir="${bin.dir}">
+				<include name="**/model/*.class"/>
+			</fileset>
+		</enhancer>
+	</target>
+
+	<target name="3.export" depends="1.build" description="Export classes into a .jar file">
 		<delete dir="${dist.dir}"/>
 		<mkdir dir="${dist.dir}"/>
-		<jar destfile="${dist.dir}/${export.file}" basedir="${bin.dir}" includes="**/remote/I**.class, **/dto/**.class,  **/common/**.class"/>
+		<jar destfile="${dist.dir}/${export.file}" basedir="${bin.dir}" includes="**/remote/I**.class, **/dto/**.class,  **/common/enums/**.class"/>
 	</target>
-	
-	<target name="3.local.test" depends="1.build" description="Runs local repository test">
+
+	<target name="4.create-db-schema" depends="2.enhance-classes" description="Creates DB Schema on the DB Server">
+		<taskdef name="schematool" classpathref="classpath" classname="org.datanucleus.store.schema.SchemaToolTask"/>
+		<schematool classpathref="classpath" persistenceUnit="stravaServer" mode="create" api="JPA" failonerror="true">
+			<sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+			<fileset dir="${bin.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</schematool>
+	</target>
+
+	<target name="5.delete-db-schema" depends="2.enhance-classes" description="Drops DB schema from the DB Server">
+		<taskdef name="schematool" classpathref="classpath" classname="org.datanucleus.store.schema.SchemaToolTask"/>
+		<schematool classpathref="classpath" persistenceUnit="stravaServer" mode="delete" api="JPA" failonerror="true">
+			<sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+			<fileset dir="${bin.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</schematool>
+	</target>
+
+	<target name="6.local.test" depends="5.delete-db-schema, 4.create-db-schema" description="Runs local repository test">
 		<java classname="es.deusto.ingenieria.sd.strava.test.LocalTest" classpathref="classpath" fork="true">
 		</java>
     </target>
 	
-	<target name="4.server" depends="1.build" description="Runs the Server">
+	<target name="7.server" depends="5.delete-db-schema, 4.create-db-schema" description="Runs the Server">
 		<java classname="es.deusto.ingenieria.sd.strava.MainProgram" classpathref="classpath" fork="true">
         	<jvmarg value="-Djava.rmi.server.codebase=file:${bin.dir}/"/>
 			<jvmarg value="-Djava.security.policy=${policy.file}"/>
-        	<arg value="${rmiRegistry.IP}"/>
+			<jvmarg value="-Dlog4j.configuration=log4j.properties"/>
+			<arg value="${rmiRegistry.IP}"/>
 	 		<arg value="${rmiRegistry.port}"/>
 			<arg value="${server.name}"/>
 			<arg value="${googleServer.IP}"/>
 			<arg value="${googleServer.port}"/>
 			<arg value="${facebookServer.IP}"/>
 			<arg value="${facebookServer.port}"/>
+			<arg value="${mail.username}"/>
+			<arg value="${mail.password}"/>
 		</java>
     </target>
 </project>

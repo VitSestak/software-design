@@ -1,6 +1,6 @@
 package es.deusto.ingenieria.sd.strava.training.dto;
 
-import es.deusto.ingenieria.sd.strava.common.SportType;
+import es.deusto.ingenieria.sd.strava.common.enums.SportType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,5 +22,6 @@ public class TrainingSessionDto implements Serializable {
     private String startTime;
     private SportType sportType;
     private float distance;
+    private float duration;
 
 }

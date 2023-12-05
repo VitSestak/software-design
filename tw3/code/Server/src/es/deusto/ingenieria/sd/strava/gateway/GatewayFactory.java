@@ -1,6 +1,6 @@
 package es.deusto.ingenieria.sd.strava.gateway;
 
-import es.deusto.ingenieria.sd.strava.common.AuthProviderType;
+import es.deusto.ingenieria.sd.strava.common.enums.AuthProviderType;
 
 public class GatewayFactory {
 

@@ -1,8 +1,7 @@
 package es.deusto.ingenieria.sd.strava.test.data;
 
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeDto;
-import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeStatusDto;
-import es.deusto.ingenieria.sd.strava.common.SportType;
+import es.deusto.ingenieria.sd.strava.common.enums.SportType;
 import es.deusto.ingenieria.sd.strava.training.dto.TrainingSessionDto;
 import es.deusto.ingenieria.sd.strava.user.dto.UserProfileDto;
 
@@ -43,11 +42,6 @@ public class Mock {
                            .endDate(new Date())
                            .target("10min")
                            .sportType(SportType.CYCLING)
-                           .challengeStatus(ChallengeStatusDto.builder()
-                                                              .challengeId(uuid)
-                                                              .progress(0.1f)
-                                                              .build()
-                           )
                            .build();
     }
 

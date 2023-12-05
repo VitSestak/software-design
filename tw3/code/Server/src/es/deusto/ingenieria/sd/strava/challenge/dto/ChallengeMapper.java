@@ -1,7 +1,9 @@
 package es.deusto.ingenieria.sd.strava.challenge.dto;
 
 import es.deusto.ingenieria.sd.strava.challenge.model.Challenge;
-import es.deusto.ingenieria.sd.strava.challenge.model.ChallengeStatus;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChallengeMapper {
 
@@ -24,11 +26,13 @@ public class ChallengeMapper {
                 .startDate(challenge.getStartDate())
                 .endDate(challenge.getEndDate())
                 .sportType(challenge.getSportType())
-                .challengeStatus(ChallengeStatusDto.builder()
-                                                   .challengeId(challenge.getChallengeStatus().getChallengeId())
-                                                   .progress(challenge.getChallengeStatus().getProgress())
-                                                   .build())
                 .build();
+    }
+
+    public List<ChallengeDto> challengeListToDto(List<Challenge> challengeList) {
+        return challengeList.stream()
+                .map(this::challengeToDto)
+                .collect(Collectors.toList());
     }
 
     public Challenge dtoToChallenge(ChallengeDto challengeDto) {
@@ -39,10 +43,12 @@ public class ChallengeMapper {
                 .endDate(challengeDto.getEndDate())
                 .sportType(challengeDto.getSportType())
                 .target(challengeDto.getTarget())
-                .challengeStatus(ChallengeStatus.builder()
-                                                .challengeId(challengeDto.getChallengeStatus().getChallengeId())
-                                                .progress(challengeDto.getChallengeStatus().getProgress())
-                                                .build())
                 .build();
+    }
+
+    public List<Challenge> dtoListToChallenge(List<ChallengeDto> challengeDtoList) {
+        return challengeDtoList.stream()
+                .map(this::dtoToChallenge)
+                .collect(Collectors.toList());
     }
 }
