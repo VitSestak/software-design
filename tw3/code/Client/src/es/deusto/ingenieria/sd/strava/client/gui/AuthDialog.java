@@ -14,32 +14,42 @@ public class AuthDialog extends JFrame {
 
 	private final AuthController authController;
 
+	// when go back after logout
+	public AuthDialog(AuthController authController, JFrame frame) {
+		this.authController = authController;
+		setupGUI(frame);
+	}
+
+	// initial screen
 	public AuthDialog(AuthController authController) {
 		this.authController = authController;
+		setupGUI(this);
+	}
 
+	public void setupGUI(JFrame frame) {
 		// set up GUI
-		this.getContentPane().removeAll();
+		frame.getContentPane().removeAll();
 
-		var registrationPanel = getRegistrationPanel();
+		var registrationPanel = getRegistrationPanel(frame);
 		var footer = new JPanel();
 		footer.add(new JLabel("@ Software Design, University of Deusto 2023"));
 
-		this.setTitle("Strava Client");
-		this.setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(800, 600);
-		this.setLocationRelativeTo(null);
+		frame.setTitle("Strava Client");
+		frame.setLayout(new BorderLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setLocationRelativeTo(null);
 
-		this.setLayout(new BorderLayout());
-		this.add(registrationPanel);
-		this.add(footer, BorderLayout.SOUTH);
+		frame.setLayout(new BorderLayout());
+		frame.add(registrationPanel);
+		frame.add(footer, BorderLayout.SOUTH);
 
-		this.revalidate();
-		this.repaint();
-		this.setVisible(true);
+		frame.revalidate();
+		frame.repaint();
+		frame.setVisible(true);
 	}
 
-	private JPanel getRegistrationPanel() {
+	private JPanel getRegistrationPanel(JFrame frame) {
 		final JPanel panel = new JPanel(new BorderLayout());
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -67,7 +77,7 @@ public class AuthDialog extends JFrame {
 		panel.add(nameP);
 
 		var birthP = new JPanel();
-		birthP.add(new JLabel("Date of birth (dd.mm.yyyy): "));
+		birthP.add(new JLabel("Date of birth (dd-mm-yyyy): "));
 		birthP.add(birthDate);
 		panel.add(birthP);
 
@@ -109,9 +119,9 @@ public class AuthDialog extends JFrame {
 														  .build()
 			);
 			if (result) {
-				var contentPane = this.getContentPane();
+				var contentPane = frame.getContentPane();
 				contentPane.remove(panel);
-				contentPane.add(getLoginPanel());
+				contentPane.add(getLoginPanel(frame));
 				contentPane.revalidate();
 				contentPane.repaint();
 			} else {
@@ -134,9 +144,9 @@ public class AuthDialog extends JFrame {
 															.build()
 			);
 			if (result) {
-				var contentPane = this.getContentPane();
+				var contentPane = frame.getContentPane();
 				contentPane.remove(panel);
-				contentPane.add(getLoginPanel());
+				contentPane.add(getLoginPanel(frame));
 				contentPane.revalidate();
 				contentPane.repaint();
 			} else {
@@ -149,9 +159,9 @@ public class AuthDialog extends JFrame {
 
 		final JButton signIn = new JButton("Already registered");
 		signIn.addActionListener(e -> {
-			var contentPane = this.getContentPane();
+			var contentPane = frame.getContentPane();
 			contentPane.remove(panel);
-			contentPane.add(getLoginPanel());
+			contentPane.add(getLoginPanel(frame));
 			contentPane.revalidate();
 			contentPane.repaint();
 		});
@@ -166,7 +176,7 @@ public class AuthDialog extends JFrame {
 		return panel;
 	}
 
-	private JPanel getLoginPanel() {
+	private JPanel getLoginPanel(JFrame frame) {
 		final JPanel panel = new JPanel(new BorderLayout(10, 10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -194,7 +204,7 @@ public class AuthDialog extends JFrame {
 		login.addActionListener(e -> {
 			boolean result = handleLogin(email.getText(), new String(password.getPassword()), loginResult);
 			if (result) {
-				new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), this, authController.getToken());
+				new UserActivityDashboard(new UserActivityController(ServiceLocator.getInstance()), frame, authController.getToken());
 			}
 		});
 

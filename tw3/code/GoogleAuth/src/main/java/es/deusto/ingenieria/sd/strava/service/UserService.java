@@ -17,12 +17,12 @@ public class UserService {
     @PostConstruct
     private void init() {
         // 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 = SHA1 hash for "password"
-        // e38ad214943daad1d64c102faec29de4afe9da3d = SHA1 hash for "Password1"
+        // 70ccd9007338d6d81dd3b6271621b9cf9a97ea00 = SHA1 hash for "Password1"
         var credentials = Map.of(
                 "user1@gmail.com", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-                "user2@gmail.com", "e38ad214943daad1d64c102faec29de4afe9da3d",
+                "user2@gmail.com", "70ccd9007338d6d81dd3b6271621b9cf9a97ea00",
                 "user3@gmail.com", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-                "user4@gmail.com", "e38ad214943daad1d64c102faec29de4afe9da3d"
+                "user4@gmail.com", "70ccd9007338d6d81dd3b6271621b9cf9a97ea00"
         );
 
         credentials.forEach((k, v) -> {

@@ -13,8 +13,6 @@ import java.awt.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -88,7 +86,7 @@ public class UserActivityDashboard {
         });
 
         final JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(e -> new AuthDialog(new AuthController(ServiceLocator.getInstance())));
+        logoutButton.addActionListener(e -> new AuthDialog(new AuthController(ServiceLocator.getInstance()), frame));
 
         var panel = new JPanel(new GridLayout(4, 2, 10, 10)); // GridLayout con 3 filas y 2 columnas
 
@@ -114,12 +112,16 @@ public class UserActivityDashboard {
         final JComboBox<SportType> sportTypeComboBox = new JComboBox<>(sportTypes);
         final JTextField distanceField = new JTextField();
         final JTextField durationField = new JTextField();
+        final JTextField startDateField = new JTextField();
+        final JTextField startTimeField = new JTextField();
 
         Object[] message = {
                 "Name of the session:", nameField,
                 "Type of sport:", sportTypeComboBox,
                 "Distance (km):", distanceField,
-                "Duration (min):", durationField
+                "Duration (min):", durationField,
+                "Start date (dd-mm-yyyy):", startDateField,
+                "Start time:", startTimeField
         };
 
         int option = JOptionPane.showConfirmDialog(null, message, "Ingrese Datos",
@@ -131,21 +133,14 @@ public class UserActivityDashboard {
             float distance = Float.parseFloat(distanceField.getText());
             float duration = Float.parseFloat(durationField.getText());
 
-            // Get actual local date time
-            final LocalDateTime now = LocalDateTime.now();
-
-            // Get actual date
-            final Date fechaActual = new Date();
-
-            // Format time
-            final DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
-            final String horaActual = now.format(formatterHora);
+            Date startDate = parseDate(startDateField.getText(), "dd-MM-yyyy");
+            String startTime = startTimeField.getText();
 
             var trainingSessionDto = TrainingSessionDto.builder()
                                                                       .id(UUID.randomUUID())
                                                                       .title(name)
-                                                                      .startDate(fechaActual)
-                                                                      .startTime(horaActual)
+                                                                      .startDate(startDate)
+                                                                      .startTime(startTime)
                                                                       .distance(distance)
                                                                       .duration(duration)
                                                                       .sportType(sportType)
