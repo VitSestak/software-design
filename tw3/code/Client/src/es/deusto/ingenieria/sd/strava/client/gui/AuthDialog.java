@@ -18,10 +18,7 @@ public class AuthDialog extends JFrame {
 		this.authController = authController;
 
 		// set up GUI
-		var contentPane = this.getContentPane();
-		contentPane.removeAll();
-		contentPane.revalidate();
-		contentPane.repaint();
+		this.getContentPane().removeAll();
 
 		var registrationPanel = getRegistrationPanel();
 		var footer = new JPanel();
@@ -37,6 +34,8 @@ public class AuthDialog extends JFrame {
 		this.add(registrationPanel);
 		this.add(footer, BorderLayout.SOUTH);
 
+		this.revalidate();
+		this.repaint();
 		this.setVisible(true);
 	}
 

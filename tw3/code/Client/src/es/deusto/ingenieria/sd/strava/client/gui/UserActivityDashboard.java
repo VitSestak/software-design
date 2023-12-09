@@ -1,8 +1,10 @@
 package es.deusto.ingenieria.sd.strava.client.gui;
 
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeStatusDto;
+import es.deusto.ingenieria.sd.strava.client.controller.AuthController;
 import es.deusto.ingenieria.sd.strava.client.controller.UserActivityController;
 import es.deusto.ingenieria.sd.strava.challenge.dto.ChallengeDto;
+import es.deusto.ingenieria.sd.strava.client.remote.ServiceLocator;
 import es.deusto.ingenieria.sd.strava.common.enums.SportType;
 import es.deusto.ingenieria.sd.strava.training.dto.TrainingSessionDto;
 
@@ -86,9 +88,7 @@ public class UserActivityDashboard {
         });
 
         final JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(e -> {
-            // TODO: logout
-        });
+        logoutButton.addActionListener(e -> new AuthDialog(new AuthController(ServiceLocator.getInstance())));
 
         var panel = new JPanel(new GridLayout(4, 2, 10, 10)); // GridLayout con 3 filas y 2 columnas
 
