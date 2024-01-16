@@ -55,9 +55,15 @@ public class AuthDialog extends JFrame {
 
 		final JLabel title = new JLabel("Welcome to Strava!");
 		title.setBorder(new EmptyBorder(new Insets(10, 0, 20, 0)));
-		title.setFont(new Font(title.getName(), Font.ITALIC, 25));
+		title.setFont(new Font(title.getName(), Font.BOLD, 25));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(title);
+
+		final JLabel subtitle = new JLabel("Registration");
+		subtitle.setBorder(new EmptyBorder(new Insets(10, 0, 20, 0)));
+		subtitle.setFont(new Font(title.getName(), Font.PLAIN, 20));
+		subtitle.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(subtitle);
 
 		final JTextField email = new JTextField(20);
 		final JTextField name = new JTextField(20);

@@ -281,7 +281,7 @@ public class UserActivityDashboard {
         for (TrainingSessionDto trainingSession : listTrainingSessions) {
 
             fillTrainingSessionListModel(trainingSession, listModel);
-            listModel.addElement("------------------------------------");
+            listModel.addElement("================================================");
         }
 
         setFrame(frame, listModel);
@@ -291,15 +291,18 @@ public class UserActivityDashboard {
         JFrame frame = new JFrame("Challenges");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        var pattern = "dd-MM-yyyy";
+        var dateFormatter = new SimpleDateFormat(pattern);
+
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (ChallengeDto challenge : listChallenges) {
-            listModel.addElement("Id: " + challenge.getId().toString());
+            listModel.addElement("ID: " + challenge.getId().toString());
             listModel.addElement( "Name: " + challenge.getName());
             listModel.addElement("Target: " + challenge.getTarget());
-            listModel.addElement("Start date: " + challenge.getStartDate().toString());
-            listModel.addElement("End date: " + challenge.getEndDate().toString());
+            listModel.addElement("Start date: " + dateFormatter.format(challenge.getStartDate()));
+            listModel.addElement("End date: " + dateFormatter.format(challenge.getEndDate()));
             listModel.addElement("Sport Type: " + challenge.getSportType().toString());
-            listModel.addElement("-----------------------");
+            listModel.addElement("================================================");
         }
 
         setFrame(frame, listModel);
@@ -313,7 +316,7 @@ public class UserActivityDashboard {
         for (ChallengeStatusDto status : statusDtoList) {
             listModel.addElement( "Challenge: " + status.getChallengeName());
             listModel.addElement("Progress: " + status.getProgress() * 100 + "%");
-            listModel.addElement("-----------------------");
+            listModel.addElement("=================================");
         }
 
         setFrame(frame, listModel);
@@ -340,12 +343,16 @@ public class UserActivityDashboard {
     }
 
     private void fillTrainingSessionListModel(TrainingSessionDto trainingSession, DefaultListModel<String> listModel) {
+        var pattern = "dd-MM-yyyy";
+        var dateFormatter = new SimpleDateFormat(pattern);
+
         var id = "Training Session ID: " + trainingSession.getId();
         var title = "Title: " + trainingSession.getTitle();
-        var startDate = "Start Date: " + trainingSession.getStartDate().toString();
+        var startDate = "Start Date: " + dateFormatter.format(trainingSession.getStartDate());
         var startTime = "Start Time: " + trainingSession.getStartTime();
         var spType = "Type of Sport: " + trainingSession.getSportType().toString();
-        var distance = "Distance: " + trainingSession.getDistance();
+        var distance = "Distance: " + trainingSession.getDistance() + "km";
+        var duration = "Duration: " + trainingSession.getDuration() + "min";
 
         listModel.addElement(id);
         listModel.addElement(title);
@@ -353,5 +360,6 @@ public class UserActivityDashboard {
         listModel.addElement(startTime);
         listModel.addElement(spType);
         listModel.addElement(distance);
+        listModel.addElement(duration);
     }
 }
